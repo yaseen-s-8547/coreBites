@@ -1,7 +1,8 @@
-import google from "../assets/Google-Logo.png"
+
 import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import {GoogleLogin} from "@react-oauth/google"
 export default function Signup() {
     const navigate = useNavigate()
     const [mail, setMail] = useState("")
@@ -53,7 +54,24 @@ export default function Signup() {
             <div className="grid grid-cols-12 w-full min-h-screen   bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)] ">
                 <div className="col-span-12 md:col-span-6   md:col-start-4 h-full flex flex-col justify-start items-center pt-8  gap-6 ">
                     <h5 className=" text-white">Create an Account</h5>
-                    <img src={google} alt="" className="object-contain cursor-pointer ml-3 hover:translate-y-2 hover:skew-1 " />
+                    <GoogleLogin className="object-contain cursor-pointer ml-3 hover:translate-y-2 hover:skew-1  border-none" 
+                    onSuccess={(credentialResponse)=>{
+                      const token = credentialResponse.credential
+                      axios.post("http://localhost:5000/google-auth",{token})
+                      .then((response)=>{
+                        setSignupStatus(response.data.message)
+                        localStorage.setItem("token",response.data.token)
+                        navigate("/app")
+
+                      })
+                      .catch((err)=>{
+                        setSignupStatus(err.response.data.message)
+                      })
+
+                    }}
+                    onError={()=>{
+                        console.log("error")
+                    }}/>
                     <p className=" mr-1 text-white">or</p>
                     <div className=" md:w-lg  ">
                         <div className="h-27  w-full max-w-lg   flex flex-col justify-start gap-2 px-4 ">
