@@ -17,7 +17,7 @@ export default function SideBar() {
                         <FontAwesomeIcon icon={faCamera} className='text-white' />
                         <input className='hidden' ref={fileInputRef} type="file" id='inputLabel' />
                     </label>
-                    <h1 className="text-center md:text-lg lg:text-md 2xl:text-xl lg:text-xl zen-dots-regular mt-2">UserName</h1>
+                    <h1 className="text-center md:text-sm lg:text-md 2xl:text-xl lg:text-xl zen-dots-regular mt-2">UserName</h1>
                 </div>
 
                 

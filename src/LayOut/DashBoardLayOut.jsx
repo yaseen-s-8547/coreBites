@@ -10,7 +10,7 @@ export default function DashBoardLayOut() {
             <div className="w-full min-h-screen bg-[radial-gradient(circle_at_7%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="md:hidden text-white p-4 text-2xl"
+                    className="sm:hidden text-white p-4 text-2xl"
                 >
                     <FontAwesomeIcon icon={faBurger} />
                 </button>
@@ -27,11 +27,10 @@ export default function DashBoardLayOut() {
                     <SideBar />
                 </div>
                 <div className=" grid grid-cols-1 sm:grid-cols-12   ">
-                    <div className="hidden min-h-screen sm:block sm:col-span-4 md:col-span-4 lg:col-span-3 2xl:col-span-2   border-t-0     ">
+                    <div className="hidden min-h-screen sm:block sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2 2xl:col-span-2   border-t-0     ">
                         <SideBar />
                     </div>
-                    <div className="md:col-span-8 lg:col-span-9 sm-col-span-8 2xl:col-span-10 h-screen ">
-                        <h1 className="text-white ">intro</h1>
+                    <div className="md:col-span-9 lg:col-span-9 sm:col-span-8 2xl:col-span-10 min-h-screen  ">
                         <Outlet />
                     </div>
                 </div>
