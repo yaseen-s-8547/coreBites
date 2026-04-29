@@ -28,6 +28,7 @@ function App() {
         <Route path="bag" element={<Bag/>}/>
         <Route path="admin" element={<Admin/>}/>
       </Route>
+     
      </Routes>
     </>
 

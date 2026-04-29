@@ -17,9 +17,8 @@ export default function AdminNavBar({activeTabs,setActiveTabs}){
             <div className="col-span-8  flex flex-row justify-center gap-7 ml-7 md:justify-evenly items-center relative text-white  ">
              
                 <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs==="create"?"text-gray-600":"text-white"}`}onClick={()=>setActiveTabs("create")}>Create</span>
-                <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs==="read"?"text-gray-600":"text-white"}`} onClick={()=>setActiveTabs("read")}>Read</span>
-                <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs==="update"?"text-gray-600":"text-white"}`}onClick={()=>setActiveTabs("update")} >Update</span>
-                <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs==="delete"?"text-gray-600":"text-white"}`} onClick={()=>setActiveTabs("delete")}>Delete</span>
+                <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs==="read"?"text-gray-600":"text-white"}`} onClick={()=>setActiveTabs("read")}>Manage</span>
+               
               
             </div>
             </>
