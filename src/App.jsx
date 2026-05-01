@@ -9,6 +9,7 @@ import DashBoardLayOut from './LayOut/DashBoardLayOut'
 import Topic from './Pages/Topic'
 import Bag from './Pages/Bag'
 import Admin from './Pages/Admin'
+import AdminPreview from './Pages/AdminPreview'
 function App() {
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route path="topics" element={<Topic/>} />
         <Route path="bag" element={<Bag/>}/>
         <Route path="admin" element={<Admin/>}/>
+        <Route path="admin/preview/:id" element={<AdminPreview/>}/>
       </Route>
      
      </Routes>

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
 import AdminNavBar from "../NavBar/AdminNavBar"
-
+import { useNavigate } from "react-router-dom"
 export default function Admin() {
+    const navigate = useNavigate()
     const [activeTabs, setActiveTabs] = useState("create")
     const [checkAdmin, setCheckAdmin] = useState(true)
     const [createStatus, setCreateStatus] = useState("")
@@ -42,7 +43,7 @@ export default function Admin() {
             return
         }
 
-        if (!parsedData.title || !parsedData.topic || !parsedData.synopsis || !parsedData.blocks) {
+        if (!parsedData.title || !parsedData.topic || !parsedData.synopsis || !parsedData.sections) {
             setCreateStatus("Missing required fields")
             return
         }
@@ -65,7 +66,7 @@ export default function Admin() {
     useEffect(() => {
         const token = localStorage.getItem("adminToken")
         if (activeTabs === "read") {
-            axios.get("http://localhost:5000/getlessondetails", { headers: { Authorization: `Bearer ${token}` } })
+            axios.get("http://localhost:5000/getlesson", { headers: { Authorization: `Bearer ${token}` } })
                 .then((response) => {
                     setLessonCard(response.data)
                 })
@@ -141,7 +142,7 @@ export default function Admin() {
                                                     <span className="font-bold text-gray-800">Synopsis: </span>
                                                     {info.synopsis.tagline}
                                                 </p>
-                                                <button className="mt-6 bg-black text-white font-bold py-3 rounded-md hover:bg-white hover:text-black border border-black cursor-pointer" >
+                                                <button className="mt-6 bg-black text-white font-bold py-3 rounded-md hover:bg-white hover:text-black border border-black cursor-pointer" onClick={()=>navigate(`preview/${info._id}`)}>
                                                     Preview
                                                 </button>
                                             </div>
