@@ -30,7 +30,7 @@ export default function DashBoardLayOut() {
                     <div className=" fixed hidden h-screen sm:block sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2 2xl:col-span-2   border-t-0     ">
                         <SideBar />
                     </div>
-                    <div className=" sm:ms-45 lg:ms-55 w-full md:col-span-9 lg:col-span-9 sm:col-span-8 2xl:col-span-10 min-h-screen  ">
+                    <div className=" sm:ms-55 md:ms-45 lg:ms-60 xl:ms-53  w-full md:col-span-9 lg:col-span-9 sm:col-span-8 xl:col-span-10 2xl:col-span-10 min-h-screen  ">
                         <Outlet />
                     </div>
                 </div>

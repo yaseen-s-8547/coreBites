@@ -16,6 +16,14 @@ import RealWorldSection from "../sections/RealWorldSection"
 import PracticeGroupSection from "../sections/PracticeGroupSection"
 export default function SectionEngine({ section }) {
 
+    if (!section) {
+        return (
+            <div className="mb-8 p-6 border border-red-500 rounded-lg">
+                Section data is missing.
+            </div>
+        )
+    }
+
     switch (section.type) {
 
         case "observation":

@@ -2,6 +2,7 @@ import React, { useState } from "react"
 
 export default function PracticeGroupSection({ section }) {
 
+  const blocks = Array.isArray(section?.blocks) ? section.blocks : []
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
 
@@ -13,11 +14,19 @@ export default function PracticeGroupSection({ section }) {
   }
 
   const checkAnswer = (block, userInput) => {
-    if (!userInput) return false
+    if (!userInput || !block?.requiredPattern) return false
 
     return userInput
       .toLowerCase()
-      .includes(block.requiredPattern.toLowerCase())
+      .includes(String(block.requiredPattern).toLowerCase())
+  }
+
+  if (!blocks.length) {
+    return (
+      <div className="mb-12 p-6 rounded-2xl border border-slate-700 bg-cyan-900/10">
+        <div className="text-slate-300">No practice items are available for this section.</div>
+      </div>
+    )
   }
 
   return (

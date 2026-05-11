@@ -227,11 +227,13 @@ export default function Admin() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full px-7 py-6">
                                         {lessonCard.map((info) => (
                                             <div key={info._id} className="flex flex-col border border-gray-300 rounded-xl bg-white p-5 hover:bg-gray-100 cursor-pointer relative">
-                                                <h1 className="text-2xl font-extrabold text-black border-b border-gray-200 pb-3">
-                                                    {info.title}
+                                                <h1 className="text-2xl font-extrabold text-black border-b border-gray-200 pb-3 h-28 overflow-hidden">
+                                                    {info.title}<br/>
+                                                    <span className="text-green-700 text-sm "> price:{info.isDemo?"Demo":info.isFree?"Free":`₹${info.price}`}</span>
                                                 </h1>
-                                                <FontAwesomeIcon icon={faTrash} className="absolute top-5 right-2 sm:right-5 hover:text-red-700" onClick={() => handleDeleteModal(info._id)} />
-                                                <FontAwesomeIcon icon={faPenToSquare} className="absolute top-10 right-2 sm:right-5 hover:text-blue-900" onClick={() => handleEditModal(info._id)} />
+                                                
+                                                <FontAwesomeIcon icon={faTrash} className="absolute top-5 right-5 sm:right-1 hover:text-red-700" onClick={() => handleDeleteModal(info._id)} />
+                                                <FontAwesomeIcon icon={faPenToSquare} className="absolute top-10 right-5 sm:right-1 hover:text-blue-900" onClick={() => handleEditModal(info._id)} />
                                                 <p className="text-gray-600 mt-3 text-sm font-medium">
                                                     <span className="font-bold text-gray-800">Synopsis: </span>
                                                     {info.synopsis.tagline}
