@@ -3,7 +3,7 @@ import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import { faGetPocket } from '@fortawesome/free-brands-svg-icons';
 export default function Home() {
 
-    
+    const token =localStorage.getItem("token")
     return (
         <>
             <div className="grid  grid-cols-1 md:grid-cols-10 lg:grid-cols-12 h-24 mt-5 ">
