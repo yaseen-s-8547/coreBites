@@ -1,9 +1,14 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
 import { faGetPocket } from '@fortawesome/free-brands-svg-icons';
+import { useEffect } from 'react';
+import axios from 'axios';
 export default function Home() {
-
-    const token =localStorage.getItem("token")
+     const token =localStorage.getItem("token")
+     useEffect(()=>{
+         axios.get("http://localhost:5000/gethomelessons",{Authorization:{headers:token}})
+     },[])
+    
     return (
         <>
             <div className="grid  grid-cols-1 md:grid-cols-10 lg:grid-cols-12 h-24 mt-5 ">
