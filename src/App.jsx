@@ -19,24 +19,28 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home />} />
+        
       </Routes>
 
-     <Routes>
-       <Route path="/app" element={<DashBoardLayOut />}>
-        <Route path="home" element={<Home />}/>
-        <Route path="topics" element={<Topic/>} />
-        <Route path="bag" element={<Bag/>}/>
-        <Route path="admin" element={<Admin/>}/>
-        <Route path="admin/preview/:id" element={<AdminPreview/>}/>
-      </Route>
-     
-     </Routes>
+      <Routes>
+        <Route path="/app" element={<DashBoardLayOut />}>
+          <Route path="home" element={<Home />} />
+          <Route path="topics" element={<Topic />} />
+          <Route path="bag" element={<Bag />} />
+          <Route path="admin" element={<Admin />} />
+          <Route path="admin/preview/:id" element={<AdminPreview />} />
+        </Route>
+      </Routes>
+      <Routes>
+        <Route path="/paywall/:id" />
+
+      </Routes>
+
     </>
 
-      )
+  )
 
 
 }
 
-      export default App
+export default App

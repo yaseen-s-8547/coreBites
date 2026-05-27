@@ -22,19 +22,29 @@ export default function Admin() {
     const handleAdminPass = () => {
         axios.post("http://localhost:5000/admincheck", { password: password })
             .then((res) => {
-
-                localStorage.setItem("adminToken", res.data.token)
-                setCheckAdmin(false)
-                setStatus("welcome admin")
-
+                
+                if (res.data && res.data.token) {
+                    localStorage.setItem("adminToken", res.data.token)
+                    setCheckAdmin(false)
+                    setStatus("welcome admin")
+                    setPassword("")
+                } else {
+                    setCheckAdmin(true)
+                    setStatus("Invalid response from server")
+                }
             })
             .catch((err) => {
-                if (err.response && err.response.data.message === "invalid token") {
+                if (err.response && err.response.data) {
+                    if (err.response.data.message === "invalid token") {
+                        setCheckAdmin(true)
+                        setStatus("you are not Admin....Who are you??")
+                    } else {
+                        setStatus(err.response.data.message || "Authentication failed")
+                    }
+                } else {
                     setCheckAdmin(true)
-                    setStatus("you are not Admin....Who are you??")
+                    setStatus("Connection error. Please try again.")
                 }
-                if (err.response.data.message === "you are not admin...are you?")
-                    setStatus(err.response.data.message)
             })
     }
 
@@ -45,9 +55,15 @@ export default function Admin() {
             setCheckAdmin(false)
             setStatus("welcome back admin")
         }
+       
     }, [])
     const handleLessonCreate = () => {
         const token = localStorage.getItem("adminToken")
+        if (!token) {
+            setCreateStatus("Session expired. Enter password again.")
+            setCheckAdmin(true)
+            return
+        }
         let parsedData
 
         try {
@@ -66,6 +82,7 @@ export default function Admin() {
         axios.post("http://localhost:5000/lessons", parsedData, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setCreateStatus(res.data.message)
+                setLesson("")
             })
             .catch((err) => {
                 if (err.response?.status === 401) {
@@ -74,20 +91,29 @@ export default function Admin() {
                     setStatus("Session expired. Enter password again.")
                     return
                 }
-                setCreateStatus(err.response.data.message || "something went wrong ")
+                setCreateStatus(err.response?.data?.message || "something went wrong ")
             })
     }
 
     useEffect(() => {
         const token = localStorage.getItem("adminToken")
         if (activeTabs === "read") {
+            
+            if (!token) {
+                setLessonFetchError("unauthorized-login again")
+                setCheckAdmin(true)
+                return
+            }
             axios.get("http://localhost:5000/getlesson", { headers: { Authorization: `Bearer ${token}` } })
                 .then((response) => {
                     setLessonCard(response.data)
+                    setLessonFetchError(null)
                 })
                 .catch((err) => {
-                    if (err.response.status === 401) {
+                    if (err.response?.status === 401) {
+                        localStorage.removeItem("adminToken")
                         setLessonFetchError("unauthorized-login again")
+                        setCheckAdmin(true)
                     }
                     else if (err.response?.status === 404) {
                         setLessonFetchError("lesson not found")
@@ -106,6 +132,11 @@ export default function Admin() {
     }
     const handleDeleteLesson = () => {
         const token = localStorage.getItem("adminToken")
+        if (!token) {
+            setStatus("Session expired. Enter password again.")
+            setCheckAdmin(true)
+            return
+        }
         axios.delete(`http://localhost:5000/deletelesson/${selectedId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 console.log(res.data.message)
@@ -115,69 +146,98 @@ export default function Admin() {
                 setSelectedId(null)
             })
             .catch((err) => {
-                console.log(err.response.data.message)
+                if (err.response?.status === 401) {
+                    localStorage.removeItem("adminToken")
+                    setCheckAdmin(true)
+                    setStatus("Session expired. Enter password again.")
+                } else {
+                    console.log(err.response?.data.message)
+                }
             })
 
     }
     const handleEditModal = (id) => {
+        const token = localStorage.getItem("adminToken")
+        if (!token) {
+            setStatus("Session expired. Enter password again.")
+            setCheckAdmin(true)
+            return
+        }
         setSelectEditId(id)
         setEditModalOpen(true)
-        const token = localStorage.getItem("adminToken")
         axios.get(`http://localhost:5000/getcurrentjson/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setCurrJson(JSON.stringify(res.data, null, 2))
                 console.log(res.data)
             })
             .catch((err) => {
-                console.log(err)
-                setCurrJson("failed to load")
+                if (err.response?.status === 401) {
+                    localStorage.removeItem("adminToken")
+                    setCheckAdmin(true)
+                    setStatus("Session expired. Enter password again.")
+                } else {
+                    console.log(err)
+                    setStatus("Failed to load lesson")
+                }
             })
     }
     const handleEditCancel = () => {
         setEditModalOpen(false)
     }
     const handleEditSave = () => {
-    let parsed
+        let parsed
 
-    try {
-        parsed = JSON.parse(currJson)
-    } catch (err) {
-        console.log(err)
-        setStatus("Invalid JSON")
-        return
-    }
+        try {
+            parsed = JSON.parse(currJson)
+        } catch (err) {
+            console.log(err)
+            setStatus("Invalid JSON")
+            return
+        }
 
-    if (!parsed.title || !parsed.topic || !parsed.synopsis || !parsed.sections) {
-        setStatus("Missing required fields")
-        return
-    }
+        if (!parsed.title || !parsed.topic || !parsed.synopsis || !parsed.sections) {
+            setStatus("Missing required fields")
+            return
+        }
 
-    const token = localStorage.getItem("adminToken")
+        const token = localStorage.getItem("adminToken")
+        if (!token) {
+            setStatus("Session expired. Enter password again.")
+            setCheckAdmin(true)
+            return
+        }
 
-    axios.put(
-        `http://localhost:5000/updatelesson/${selectEditId}`,
-        parsed,
-        { headers: { Authorization: `Bearer ${token}` } }
-    )
-    .then((res) => {
-        console.log(res.data.message)
-
-        setEditModalOpen(false)
-        setSelectEditId(null)
-       
-
-        
-        setLessonCard(prev =>
-            prev.map(item =>
-                item._id === selectEditId ? { ...item, ...parsed } : item
-            )
+        axios.put(
+            `http://localhost:5000/updatelesson/${selectEditId}`,
+            parsed,
+            { headers: { Authorization: `Bearer ${token}` } }
         )
-    })
-    .catch((err) => {
-        console.log(err)
-        setStatus("Update failed")
-    })
-}
+        .then((res) => {
+            console.log(res.data.message)
+
+            setEditModalOpen(false)
+            setSelectEditId(null)
+           
+
+            
+            setLessonCard(prev =>
+                prev.map(item =>
+                    item._id === selectEditId ? { ...item, ...parsed } : item
+                )
+            )
+            setStatus("Lesson updated successfully")
+        })
+        .catch((err) => {
+            if (err.response?.status === 401) {
+                localStorage.removeItem("adminToken")
+                setCheckAdmin(true)
+                setStatus("Session expired. Enter password again.")
+            } else {
+                console.log(err)
+                setStatus("Update failed")
+            }
+        })
+    }
 
 
     return (
@@ -226,18 +286,22 @@ export default function Admin() {
                                 lessonFetchError === null ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full px-7 py-6">
                                         {lessonCard.map((info) => (
-                                            <div key={info._id} className="flex flex-col border border-gray-300 rounded-xl bg-white p-5 hover:bg-gray-100 cursor-pointer relative">
-                                                <h1 className="text-2xl font-extrabold text-black border-b border-gray-200 pb-3 h-28 overflow-hidden">
-                                                    {info.title}<br/>
+                                            <div key={info._id} className="min-h-[290px] flex flex-col justify-between gap-5 border border-gray-300 rounded-xl bg-white p-5 hover:bg-gray-100 cursor-pointer relative">
+                                                <div>
+                                                <div className="border-b border-gray-200 pb-3 pr-10">
+                                                    <h1 className="line-clamp-2 text-2xl font-extrabold text-black leading-tight">
+                                                    {info.title}
+                                                    </h1>
                                                     <span className="text-green-700 text-sm "> price:{info.isDemo?"Demo":info.isFree?"Free":`₹${info.price}`}</span>
-                                                </h1>
+                                                </div>
                                                 
                                                 <FontAwesomeIcon icon={faTrash} className="absolute top-5 right-5 sm:right-1 hover:text-red-700" onClick={() => handleDeleteModal(info._id)} />
                                                 <FontAwesomeIcon icon={faPenToSquare} className="absolute top-10 right-5 sm:right-1 hover:text-blue-900" onClick={() => handleEditModal(info._id)} />
-                                                <p className="text-gray-600 mt-3 text-sm font-medium">
+                                                <p className="line-clamp-3 text-gray-600 mt-3 text-sm font-medium leading-relaxed">
                                                     <span className="font-bold text-gray-800">Synopsis: </span>
-                                                    {info.synopsis.tagline}
+                                                    {info.synopsis?.tagline}
                                                 </p>
+                                                </div>
                                                 <button className="mt-6 bg-black text-white font-bold py-3 rounded-md hover:bg-white hover:text-black border border-black cursor-pointer" onClick={() => navigate(`preview/${info._id}`)}>
                                                     Preview
                                                 </button>

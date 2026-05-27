@@ -13,6 +13,7 @@ export default function Signin() {
     const [passErr, setPassErr] = useState("")
     const [signinStatus, setsigninStatus] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)
+    
     const handleSignin = () => {
         if (!email.endsWith("@gmail.com") || email.length < "@gmail.com".length) {
             setEmailErr("provide Valid email")
@@ -25,9 +26,9 @@ export default function Signin() {
                 .then((response) => {
                     const token = response.data.token
                     localStorage.setItem("token", token)
-
+                    
                     setTimeout(() => {
-                        navigate("/app")
+                        navigate("/app/home")
                     }, 2000);
                     setsigninStatus("sign in successfull")
                     setIsSuccess(true)
@@ -45,7 +46,7 @@ export default function Signin() {
      useEffect(()=>{
      const token =localStorage.getItem("token")
      if(token){
-        navigate("/app")
+        navigate("/app/home")
      }
      },[])
 
@@ -64,8 +65,9 @@ export default function Signin() {
                                 axios.post("http://localhost:5000/google-auth", { token })
                                     .then((response) => {
                                         localStorage.setItem("token", response.data.token)
+                                      
                                         setsigninStatus("sign in success")
-                                        navigate("/app")
+                                        navigate("/app/home")
                                     })
                                     .catch(() => {
                                         setsigninStatus("failed")
