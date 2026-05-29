@@ -10,6 +10,7 @@ import Topic from './Pages/Topic'
 import Bag from './Pages/Bag'
 import Admin from './Pages/Admin'
 import AdminPreview from './Pages/AdminPreview'
+import Paywall from './Components/Paywall'
 function App() {
 
 
@@ -32,8 +33,7 @@ function App() {
         </Route>
       </Routes>
       <Routes>
-        <Route path="/paywall/:id" />
-
+        <Route path="/paywall/:id" element={<Paywall/>} />
       </Routes>
 
     </>

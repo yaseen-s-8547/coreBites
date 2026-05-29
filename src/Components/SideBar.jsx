@@ -59,7 +59,7 @@ const fetchProfileImage = () => {
 
             <div className="flex flex-col h-full bg-white ">
                 <div className="w-full h-20  flex flex-row relative  items-center bg-white gap-2
-                  px-3 border-b-2">
+                  px-2 border-b-2">
                     {image  ? (<><img alt='no image available' className='rounded-full border border-black w-15 h-15 object-cover cursor-pointer' src={image} /></>) : (<><label htmlFor='inputLabel' className='rounded-full border flex items-center border-black px-5 py-2 w-15 h-15 cursor-pointer bg-gray-950  '>
                         <FontAwesomeIcon icon={faCamera} className='text-white' />
                         <input className='hidden' onChange={(e) => { const selectedFile = e.target.files[0]; handleUpload(selectedFile); }} type="file" id='inputLabel' />  
@@ -77,7 +77,7 @@ const fetchProfileImage = () => {
                         const isActive = location.pathname === item.path
                         return (
                             <div key={item.path} onClick={() => navigate(item.path)} className={`  text-3xl ${isActive ? "bg-black text-white" : "bg-white text-black"} hover:bg-gray-600 hover:text-white w-full h-14 px-3 py-1 font-bold text-black border-0 flex flex-row items-center`}><FontAwesomeIcon icon={item.icon} className='' /><h1>{item.label}</h1></div>
-                        )
+                       )
 
                     })}
 

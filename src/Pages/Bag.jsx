@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBriefcase, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export default function Bag() {
 
     const [bag, setBag] = useState([])
@@ -44,6 +45,11 @@ export default function Bag() {
          })
          
    }
+   const navigate = useNavigate()
+   const handlePurchase=(id)=>{
+       navigate(`/paywall/${id}`)
+        
+   }
 
 
 
@@ -73,14 +79,14 @@ export default function Bag() {
                 (
                     <>
                         
-                            <div className="grid grid-cols-1 lg:grid-cols-12   p-5 sm:mt-4 sm:p-5 sm:me-5 gap-4 md:ms-10 md:p-5 min-h-[290px]    ">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 relative  p-5 sm:mt-4 sm:p-5 sm:me-5 gap-4 md:ms-10 md:p-5 min-h-[290px]    ">
 
                                 {bag.map((bag) => (
                                 <div  key={bag.lessonId?._id}  className="col-span-4  lg:col-span-6  xl:col-span-4 relative  min-w-0 flex justify-center  flex-col gap-4  p-8  overflow-hidden rounded-xl h-full bg-white  ">
                                     <h1 className='text-2xl w-full font-bold  line-clamp-1 ps-2  pb-1  border-b border-gray-300'>{bag.lessonId?.title}</h1>
                                     <p className='text-md font-light line-clamp-6 ps-2'><span className='text-black font-bold '>Synopsis</span> :   {bag.lessonId?.synopsis?.tagline}</p>
                                     <h1 className='ps-2 text-lg font-bold '>price:<span className='text-green-600'>  ₹ {bag.lessonId.price}</span></h1>
-                                    <button className='w-full hover:bg-white hover:text-black bg-black rounded-xl h-15 text-white'>purchase</button>
+                                    <button className='w-full hover:bg-white hover:text-black bg-black rounded-xl h-15 text-white' onClick={()=>handlePurchase(bag.lessonId?._id)}>purchase</button>
                                     <FontAwesomeIcon icon={faTrash}  className="absolute top-5 right-5 sm:right-3 hover:text-red-700" onClick={()=>handleDeleteModalOpen(bag.lessonId._id)} />
                                      {isModalId===bag.lessonId._id &&(<><div className="w-60 h-30 bg-gray-700 text-white absolute right-5 top-12 rounded-xl shadow ">
                                         <h1 className='p-5'>Are you sure...</h1>
@@ -88,9 +94,15 @@ export default function Bag() {
                                             <button className='bg-white hover:bg-red-700 rounded-xl text-black hover-:text-white p-3 font-bold w-1/2' onClick={()=>handleDeleteBagItem(bag.lessonId._id)}>yes</button>
                                             <button className='bg-black hover:bg-white hover:text-black text-white p-3 rounded-xl font-bold w-1/2' onClick={handleDeleteModalClose}>No</button>
                                         </div>
-                                     </div></>)}
+                                     </div></>
+                                    
+                                    )}
+                                    
+
                                 </div>
+                               
                                ))}
+                               
 
                             </div>
                        
