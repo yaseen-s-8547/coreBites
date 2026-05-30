@@ -6,7 +6,7 @@ import axios from "axios"
 export default function SideBar() {
     const navigate = useNavigate()
     const location = useLocation()
-    const sideBarConfig = [{ label: "Home", icon: faHouse, path: "/app/home" }, { label: "Topics", icon: faPager, path: "/app/topics" }, { label: "Bag", icon: faBriefcase, path: "/app/bag" }, { label: "Admin", icon: faEye, path: "/app/admin" }]
+    const sideBarConfig = [{ label: "Home", icon: faHouse, path: "/app/home" }, { label: "Lesson", icon: faPager, path: "/app/lesson" }, { label: "Bag", icon: faBriefcase, path: "/app/bag" }, { label: "Admin", icon: faEye, path: "/app/admin" }]
     const[isEditName,setIsEditName]=useState(true)
     const [image, setImage] = useState(null)
     const [userName,setUserName]=useState("User")
@@ -54,6 +54,11 @@ const fetchProfileImage = () => {
             setIsEditName(false)
         })
     }
+
+    const handleLogOut=()=>{
+        localStorage.removeItem("token")
+        navigate("/")
+    }
     return (
         <>
 
@@ -72,7 +77,7 @@ const fetchProfileImage = () => {
 
 
 
-                <div className='bg-white text-white flex flex-col cursor-pointer   py-4 '>
+                <div className='bg-white text-white flex-1 flex flex-col cursor-pointer   py-4 '>
                     {sideBarConfig.map((item) => {
                         const isActive = location.pathname === item.path
                         return (
@@ -81,6 +86,10 @@ const fetchProfileImage = () => {
 
                     })}
 
+                </div>
+
+                <div className="border-t w-full size-20 ">
+                    <button className="w-full hover:bg-white  cursor-pointer hover:text-black bg-black p-4 min-h-full text-white font-bolder" onClick={handleLogOut}>LOGOUT</button>
                 </div>
             </div>
         </>

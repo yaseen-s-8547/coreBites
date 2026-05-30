@@ -261,7 +261,7 @@ export default function Admin() {
                 (
                     <>
 
-                        <div className="grid grid-cols-1 md:grid-cols-12   min-h-26  w-full bg-black border-b border-white " >
+                        <div className="grid grid-cols-1 md:grid-cols-12 md:ms-4  lg:ms-0   min-h-26  w-full bg-black border-b border-white " >
 
                             <AdminNavBar activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
 
@@ -284,7 +284,7 @@ export default function Admin() {
 
                             {activeTabs === "read" && (
                                 lessonFetchError === null ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full px-7 py-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 md:ms-4 xl:grid-cols-3 gap-6 w-full px-7 py-6">
                                         {lessonCard.map((info) => (
                                             <div key={info._id} className="min-h-[290px] flex flex-col justify-between gap-5 border border-gray-300 rounded-xl bg-white p-5 hover:bg-gray-100 cursor-pointer relative">
                                                 <div>

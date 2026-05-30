@@ -6,7 +6,7 @@ import Home from './Pages/Home'
 import Signup from './Pages/Signup'
 import Signin from "./Pages/Signin"
 import DashBoardLayOut from './LayOut/DashBoardLayOut'
-import Topic from './Pages/Topic'
+import Lesson from './Pages/Lesson'
 import Bag from './Pages/Bag'
 import Admin from './Pages/Admin'
 import AdminPreview from './Pages/AdminPreview'
@@ -26,7 +26,7 @@ function App() {
       <Routes>
         <Route path="/app" element={<DashBoardLayOut />}>
           <Route path="home" element={<Home />} />
-          <Route path="topics" element={<Topic />} />
+          <Route path="lesson" element={<Lesson />} />
           <Route path="bag" element={<Bag />} />
           <Route path="admin" element={<Admin />} />
           <Route path="admin/preview/:id" element={<AdminPreview />} />
