@@ -268,7 +268,7 @@ export default function Admin() {
                         </div>
 
 
-                        <div className="w-full  flex flex-row justify-center overflow-y-auto  xl:mt-1 ">
+                        <div className="w-full  bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]  flex flex-row justify-center overflow-y-auto min-h-screen">
                             {activeTabs === "create" && <><div className="flex flex-col w-68 sm:w-72 md:w-2/4 min-h-96 mt-7 justify-center items-center">
 
                                 <h1 className="text-white text-3xl ">INPUT YOUR JSON HERE</h1>

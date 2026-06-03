@@ -1,5 +1,12 @@
 import logo from "../assets/coreBitesLogo.png"
+import { useNavigate } from "react-router-dom"
 export default function Navbar(){
+    const navigate =useNavigate()
+    const handleAdminClick=()=>{
+      navigate("/admin")
+    
+
+    }
     return(
     <>
       <div className="col-span-4    ">
@@ -14,9 +21,8 @@ export default function Navbar(){
       </div>
     <div className="col-span-8  flex flex-row justify-center gap-7 ml-7 md:justify-evenly items-center relative text-white  ">
      
-        <span className="text-3xl cursor-pointer hover:text-gray-600">About</span>
-        <span className="text-3xl cursor-pointer hover:text-gray-600">Pricing</span>
-        <span className="text-3xl cursor-pointer  hover:text-gray-600">Contact</span>
+        <span className="text-3xl cursor-pointer hover:text-gray-600" onClick={handleAdminClick}>Admin</span>
+        
       
     </div>
     </>

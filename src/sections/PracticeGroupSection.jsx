@@ -1,15 +1,14 @@
 import React, { useState } from "react"
 
-export default function PracticeGroupSection({ section }) {
-
+export default function PracticeGroupSection({ section, onComplete }) {
   const blocks = Array.isArray(section?.blocks) ? section.blocks : []
   const [answers, setAnswers] = useState({})
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (index, value) => {
-    setAnswers(prev => ({
+    setAnswers((prev) => ({
       ...prev,
-      [index]: value
+      [index]: value,
     }))
   }
 
@@ -21,41 +20,44 @@ export default function PracticeGroupSection({ section }) {
       .includes(String(block.requiredPattern).toLowerCase())
   }
 
+  const handleSubmit = () => {
+    setSubmitted(true)
+
+    const isComplete = blocks.every((block, index) =>
+      checkAnswer(block, answers[index])
+    )
+
+    if (isComplete) {
+      onComplete?.()
+    }
+  }
+
   if (!blocks.length) {
     return (
       <div className="mb-12 p-6 rounded-2xl border border-slate-700 bg-cyan-900/10">
-        <div className="text-slate-300">No practice items are available for this section.</div>
+        <div className="text-slate-300">
+          No practice items are available for this section.
+        </div>
       </div>
     )
   }
 
   return (
     <div className="mb-12">
-
       <div className="rounded-2xl border border-cyan-700/40 bg-cyan-900/10 p-6">
-
-        {/* LABEL */}
         <div className="mb-4 text-xs uppercase tracking-wider text-cyan-400">
           Practice
         </div>
 
-        {/* QUESTIONS */}
         <div className="space-y-6">
-
           {section.blocks.map((block, index) => {
-
             const userInput = answers[index] || ""
             const isCorrect = checkAnswer(block, userInput)
 
             return (
               <div key={index}>
+                <div className="text-cyan-100 mb-2">{block.content}</div>
 
-                {/* QUESTION */}
-                <div className="text-cyan-100 mb-2">
-                  {block.content}
-                </div>
-
-                {/* INPUT */}
                 <input
                   type="text"
                   value={userInput}
@@ -72,36 +74,33 @@ export default function PracticeGroupSection({ section }) {
                   placeholder="Type your answer..."
                 />
 
-                {/* HINT */}
                 {!submitted && block.hint && (
                   <div className="text-xs text-slate-400 mt-1">
                     Hint: {block.hint}
                   </div>
                 )}
 
-                {/* FEEDBACK */}
                 {submitted && (
-                  <div className={`text-sm mt-1 ${isCorrect ? "text-green-400" : "text-red-400"}`}>
+                  <div
+                    className={`text-sm mt-1 ${
+                      isCorrect ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
                     {isCorrect ? "Correct" : "Try again"}
                   </div>
                 )}
-
               </div>
             )
           })}
-
         </div>
 
-        {/* BUTTON */}
         <button
-          onClick={() => setSubmitted(true)}
+          onClick={handleSubmit}
           className="mt-6 px-4 py-2 bg-cyan-600 rounded-lg text-sm"
         >
           Check Answers
         </button>
-
       </div>
-
     </div>
   )
 }

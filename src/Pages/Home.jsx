@@ -10,6 +10,7 @@ export default function Home() {
     const [lessons, setLessons] = useState([])
     const [error, setError] = useState("")
     const [lessonFetchError, setLessonFetchError] = useState(false)
+    const [search,setSearch]=useState("")
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -38,6 +39,37 @@ export default function Home() {
                 console.log(err.response.data.message)
             })
     }
+    const handleSearch=(value)=>{
+        const token= localStorage.getItem("token")
+        axios.get(`http://localhost:5000/gethomelessons?search=${value}`,{ headers: { Authorization: `Bearer ${token}` } })
+        .then((res)=>{
+            setLessons(res.data)
+        })
+        .catch((err) => {
+                setLessonFetchError(true)
+                setError(err.response?.data?.message || "Unable to fetch lessons")
+                if (err.response?.data?.message === "no token found") {
+                     navigate("/signin")
+                }
+
+            })
+    }
+    const handleClear=()=>{
+        const token =localStorage.getItem("token")
+           axios.get("http://localhost:5000/gethomelessons", { headers: { Authorization: `Bearer ${token}` } })
+            .then((res) => {
+                setLessons(res.data)
+            })
+            .catch((err) => {
+                setLessonFetchError(true)
+                setError(err.response?.data?.message || "Unable to fetch lessons")
+                if (err.response?.data?.message === "no token found") {
+                     navigate("/signin")
+                }
+
+            })
+
+    }
 
     return (
         <>
@@ -56,17 +88,28 @@ export default function Home() {
                         <div className="lg:col-span-6 lg:col-start-4 md:col-span-8 md:col-start-2
                  ">
                             <div className=" p-5 md:p-3 flex flex-row justify-center items-center h-full">
-                                <input className="bg-white h-14 ps-3 text-black w-2xl rounded-lg border border-black" placeholder="live search" />
+                                <input className="bg-white h-14 ps-3 text-black w-2xl rounded-lg border border-black" placeholder="live search" value={search} onChange={(e)=>{
+                                    const value =e.target.value
+                                    setSearch(value)
+                                    
+                                    if(value===""){
+                                       handleClear()
+                                    }
+                                    else{
+                                        handleSearch(value)
+                                    }
+
+                                }} />
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 lg:grid-cols-12 p-3 sm:me-3 md:ms-5 min-h-screen md:gap-2 ">
+                    <div className="grid grid-cols-1 lg:grid-cols-12  p-3 sm:me-3 md:ms-5 min-h-screen md:gap-2 ">
 
                         {lessons.map((lesson, index) => {
                             const isLarge = index % 4 === 0 || index % 4 === 3
 
                             return (
-                                <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-[320px] mt-5 md:ms-3 relative bg-white rounded-xl p-5 flex flex-col justify-between gap-6`}>
+                                <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-80 max-h-110.5   mt-5 md:ms-3 relative bg-white rounded-xl p-5 flex flex-col justify-between gap-6`}>
                                     <div className="pr-14">
                                         <h1 className="line-clamp-2 text-black font-bold text-3xl sm:text-4xl leading-tight border-b-2 border-black pb-3">
                                             {lesson.title}

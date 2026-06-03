@@ -79,10 +79,10 @@ export default function Bag() {
                 (
                     <>
                         
-                            <div className="grid grid-cols-1 lg:grid-cols-12 relative  p-5 sm:mt-4 sm:p-5 sm:me-5 gap-4 md:ms-10 md:p-5 min-h-[290px]    ">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 relative  p-5 sm:mt-4 sm:p-5 sm:me-5 gap-4 md:ms-10 md:p-5  min-h-[290px]    ">
 
                                 {bag.map((bag) => (
-                                <div  key={bag.lessonId?._id}  className="col-span-4  lg:col-span-6  xl:col-span-4 relative  min-w-0 flex justify-center  flex-col gap-4  p-8  overflow-hidden rounded-xl h-full bg-white  ">
+                                <div  key={bag.lessonId?._id}  className="col-span-4  lg:col-span-6  xl:col-span-4 relative  min-w-0 flex justify-center  flex-col gap-4  p-8  overflow-hidden rounded-xl  bg-white  ">
                                     <h1 className='text-2xl w-full font-bold  line-clamp-1 ps-2  pb-1  border-b border-gray-300'>{bag.lessonId?.title}</h1>
                                     <p className='text-md font-light line-clamp-6 ps-2'><span className='text-black font-bold '>Synopsis</span> :   {bag.lessonId?.synopsis?.tagline}</p>
                                     <h1 className='ps-2 text-lg font-bold '>price:<span className='text-green-600'>  ₹ {bag.lessonId.price}</span></h1>
