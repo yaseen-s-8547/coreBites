@@ -7,7 +7,7 @@ export default function Landing() {
                 navigate("/signup")
         }
         const handleComeIn = () => {
-                navigate("/signin")
+                navigate("/Signin")
         }
         return (
                 <>

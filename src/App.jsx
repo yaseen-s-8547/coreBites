@@ -13,6 +13,7 @@ import AdminPreview from './Pages/AdminPreview'
 import Paywall from './Components/Paywall'
 import UserLessonView from './Pages/UserLessonView'
 import About from './Pages/About'
+import AdminSignin from './Pages/AdminSignin'
 function App() {
 
 
@@ -39,6 +40,7 @@ function App() {
       <Routes>
         <Route path="/learn/:id" element={<UserLessonView/>}/>
         <Route path="/admin" element={<Admin />} />
+        <Route path="/adminSignin" element={<AdminSignin/>}/>
         <Route path="/admin/preview/:id" element={<AdminPreview />} />
      </Routes>
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import axios from "axios"
 import AdminNavBar from "../NavBar/AdminNavBar"
 import { useNavigate } from "react-router-dom"
@@ -7,10 +7,9 @@ import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
 export default function Admin() {
     const navigate = useNavigate()
     const [activeTabs, setActiveTabs] = useState("create")
-    const [checkAdmin, setCheckAdmin] = useState(true)
+    // Authentication is now determined by the adminToken created on the AdminSignin page.
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [createStatus, setCreateStatus] = useState("")
-    const [password, setPassword] = useState("")
-    const [status, setStatus] = useState("")
     const [lesson, setLesson] = useState("")
     const [lessonCard, setLessonCard] = useState([])
     const [lessonFetchError, setLessonFetchError] = useState(null)
@@ -19,49 +18,32 @@ export default function Admin() {
     const [editModalOpen, setEditModalOpen] = useState(false)
     const [selectEditId, setSelectEditId] = useState(null)
     const [currJson, setCurrJson] = useState("")
-    const handleAdminPass = () => {
-        axios.post("http://localhost:5000/admincheck", { password: password })
-            .then((res) => {
-                
-                if (res.data && res.data.token) {
-                    localStorage.setItem("adminToken", res.data.token)
-                    setCheckAdmin(false)
-                    setStatus("welcome admin")
-                    setPassword("")
-                } else {
-                    setCheckAdmin(true)
-                    setStatus("Invalid response from server")
-                }
-            })
-            .catch((err) => {
-                if (err.response && err.response.data) {
-                    if (err.response.data.message === "invalid token") {
-                        setCheckAdmin(true)
-                        setStatus("you are not Admin....Who are you??")
-                    } else {
-                        setStatus(err.response.data.message || "Authentication failed")
-                    }
-                } else {
-                    setCheckAdmin(true)
-                    setStatus("Connection error. Please try again.")
-                }
-            })
-    }
+
+    // Every missing or rejected adminToken ends the local admin session and returns to sign-in.
+    const handleUnauthorized = useCallback(() => {
+        localStorage.removeItem("adminToken")
+        setIsAuthenticated(false)
+        navigate("/adminsignin")
+    }, [navigate])
 
     useEffect(() => {
+        // AdminSignin owns credential validation; this page only requires its stored adminToken.
         const token = localStorage.getItem("adminToken")
 
-        if (token) {
-            setCheckAdmin(false)
-            setStatus("welcome back admin")
+        if (!token) {
+            navigate("/adminsignin")
+            return
         }
-       
-    }, [])
+
+        // This state transition happens only after the mount-time token check succeeds.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setIsAuthenticated(true)
+    }, [navigate])
+
     const handleLessonCreate = () => {
         const token = localStorage.getItem("adminToken")
         if (!token) {
-            setCreateStatus("Session expired. Enter password again.")
-            setCheckAdmin(true)
+            handleUnauthorized()
             return
         }
         let parsedData
@@ -86,9 +68,8 @@ export default function Admin() {
             })
             .catch((err) => {
                 if (err.response?.status === 401) {
-                    localStorage.removeItem("adminToken")
-                    setCheckAdmin(true)
-                    setStatus("Session expired. Enter password again.")
+                    // A rejected token is handled the same way for every protected admin request.
+                    handleUnauthorized()
                     return
                 }
                 setCreateStatus(err.response?.data?.message || "something went wrong ")
@@ -100,8 +81,8 @@ export default function Admin() {
         if (activeTabs === "read") {
             
             if (!token) {
-                setLessonFetchError("unauthorized-login again")
-                setCheckAdmin(true)
+                // There is no token to clear; redirect before attempting the protected request.
+                navigate("/adminsignin")
                 return
             }
             axios.get("http://localhost:5000/getlesson", { headers: { Authorization: `Bearer ${token}` } })
@@ -111,9 +92,7 @@ export default function Admin() {
                 })
                 .catch((err) => {
                     if (err.response?.status === 401) {
-                        localStorage.removeItem("adminToken")
-                        setLessonFetchError("unauthorized-login again")
-                        setCheckAdmin(true)
+                        handleUnauthorized()
                     }
                     else if (err.response?.status === 404) {
                         setLessonFetchError("lesson not found")
@@ -124,7 +103,7 @@ export default function Admin() {
 
                 })
         }
-    }, [activeTabs])
+    }, [activeTabs, handleUnauthorized, navigate])
 
     const handleDeleteModal = (id) => {
         setModalOpen(true)
@@ -133,8 +112,7 @@ export default function Admin() {
     const handleDeleteLesson = () => {
         const token = localStorage.getItem("adminToken")
         if (!token) {
-            setStatus("Session expired. Enter password again.")
-            setCheckAdmin(true)
+            handleUnauthorized()
             return
         }
         axios.delete(`http://localhost:5000/deletelesson/${selectedId}`, { headers: { Authorization: `Bearer ${token}` } })
@@ -147,9 +125,7 @@ export default function Admin() {
             })
             .catch((err) => {
                 if (err.response?.status === 401) {
-                    localStorage.removeItem("adminToken")
-                    setCheckAdmin(true)
-                    setStatus("Session expired. Enter password again.")
+                    handleUnauthorized()
                 } else {
                     console.log(err.response?.data.message)
                 }
@@ -159,8 +135,7 @@ export default function Admin() {
     const handleEditModal = (id) => {
         const token = localStorage.getItem("adminToken")
         if (!token) {
-            setStatus("Session expired. Enter password again.")
-            setCheckAdmin(true)
+            handleUnauthorized()
             return
         }
         setSelectEditId(id)
@@ -172,12 +147,9 @@ export default function Admin() {
             })
             .catch((err) => {
                 if (err.response?.status === 401) {
-                    localStorage.removeItem("adminToken")
-                    setCheckAdmin(true)
-                    setStatus("Session expired. Enter password again.")
+                    handleUnauthorized()
                 } else {
                     console.log(err)
-                    setStatus("Failed to load lesson")
                 }
             })
     }
@@ -191,19 +163,16 @@ export default function Admin() {
             parsed = JSON.parse(currJson)
         } catch (err) {
             console.log(err)
-            setStatus("Invalid JSON")
             return
         }
 
         if (!parsed.title || !parsed.topic || !parsed.synopsis || !parsed.sections) {
-            setStatus("Missing required fields")
             return
         }
 
         const token = localStorage.getItem("adminToken")
         if (!token) {
-            setStatus("Session expired. Enter password again.")
-            setCheckAdmin(true)
+            handleUnauthorized()
             return
         }
 
@@ -225,42 +194,23 @@ export default function Admin() {
                     item._id === selectEditId ? { ...item, ...parsed } : item
                 )
             )
-            setStatus("Lesson updated successfully")
         })
         .catch((err) => {
             if (err.response?.status === 401) {
-                localStorage.removeItem("adminToken")
-                setCheckAdmin(true)
-                setStatus("Session expired. Enter password again.")
+                handleUnauthorized()
             } else {
                 console.log(err)
-                setStatus("Update failed")
             }
         })
     }
 
+    // Prevent the protected dashboard from flashing while the stored token is being checked.
+    if (!isAuthenticated) {
+        return null
+    }
 
     return (
         <>
-            {checkAdmin ?
-                (
-                    <>
-                        <div className=" h-screen w-full flex flex-col justify-center items-center">
-                            <h1 className="text-white text-xl">Enter Admin Password</h1>
-                            <div>
-                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-white mt-5 w-full md:w-52 px-2 py-3 rounded-l border border-gray  hover:border-light" />
-                                <button className="bg-gray-500 text-white w-full hover:bg-black  font-bold py-3 rounded-r md:w-23" onClick={handleAdminPass}>Enter</button>
-                                <p className="text-white">{status}</p>
-                            </div>
-
-
-                        </div>
-
-                    </>
-                ) :
-                (
-                    <>
-
                         <div className="grid grid-cols-1 md:grid-cols-12 md:ms-4  lg:ms-0   min-h-26  w-full bg-black border-b border-white " >
 
                             <AdminNavBar activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
@@ -361,9 +311,6 @@ export default function Admin() {
                         </div>
 
 
-
-                    </>
-                )}
 
         </>
     )
