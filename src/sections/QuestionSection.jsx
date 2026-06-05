@@ -7,16 +7,24 @@ export default function QuestionSection({ section, onComplete }) {
   const textBlock = section.blocks.find((b) => b.type === "text")
   const quizBlock = section.blocks.find((b) => b.type === "quiz")
 
+  const questionText =
+    textBlock?.content || textBlock?.prompt || textBlock?.question ||
+    "No question text provided."
+  const options = Array.isArray(quizBlock?.options) ? quizBlock.options : []
+  const answer = quizBlock?.answer
+
   const handleSelect = (option) => {
+    if (!quizBlock) return
+
     setSelected(option)
     setShowResult(true)
 
-    if (option === quizBlock.answer) {
+    if (option === answer) {
       onComplete?.()
     }
   }
 
-  const isCorrect = selected === quizBlock.answer
+  const isCorrect = selected === answer
 
   return (
     <div className="mb-10">
@@ -26,28 +34,32 @@ export default function QuestionSection({ section, onComplete }) {
         </div>
 
         <div className="text-slate-200 whitespace-pre-line mb-6">
-          {textBlock.content}
+          {questionText}
         </div>
 
         <div className="space-y-3 mb-6">
-          {quizBlock.options.map((option, index) => {
-            const isSelected = selected === option
-            const isAnswer = quizBlock.answer === option
+          {options.length ? (
+            options.map((option, index) => {
+              const isSelected = selected === option
+              const isAnswer = answer === option
 
-            return (
-              <div
-                key={index}
-                onClick={() => handleSelect(option)}
-                className={`cursor-pointer px-4 py-3 rounded-lg border transition-all
-                  ${isSelected && isAnswer && "border-green-500 bg-green-900/20"}
-                  ${isSelected && !isAnswer && "border-red-500 bg-red-900/20"}
-                  ${!isSelected && "border-slate-700 hover:border-slate-500"}
-                `}
-              >
-                {option}
-              </div>
-            )
-          })}
+              return (
+                <div
+                  key={index}
+                  onClick={() => handleSelect(option)}
+                  className={`cursor-pointer px-4 py-3 rounded-lg border transition-all
+                    ${isSelected && isAnswer && "border-green-500 bg-green-900/20"}
+                    ${isSelected && !isAnswer && "border-red-500 bg-red-900/20"}
+                    ${!isSelected && "border-slate-700 hover:border-slate-500"}
+                  `}
+                >
+                  {option}
+                </div>
+              )
+            })
+          ) : (
+            <div className="text-slate-400">No answer options available.</div>
+          )}
         </div>
 
         {showResult && (
@@ -58,7 +70,9 @@ export default function QuestionSection({ section, onComplete }) {
                 : "bg-red-900/20 text-red-300"
             }`}
           >
-            {isCorrect ? quizBlock.correctFeedback : quizBlock.wrongFeedback}
+            {isCorrect
+              ? quizBlock?.correctFeedback || "Correct!"
+              : quizBlock?.wrongFeedback || "Incorrect. Try again."}
           </div>
         )}
       </div>
