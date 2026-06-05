@@ -111,7 +111,7 @@ export default function Home() {
                             const isLarge = index % 4 === 0 || index % 4 === 3
 
                             return (
-                                <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-80 max-h-110.5   mt-5 md:ms-3 relative bg-white rounded-xl p-5 flex flex-col justify-between gap-6`}>
+                                <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-60 max-h-70.5   mt-5 md:ms-3 relative bg-white rounded-xl p-5 flex flex-col justify-between gap-6`}>
                                     <div className="pr-14">
                                         <h1 className="line-clamp-2 text-black font-bold text-3xl sm:text-4xl leading-tight border-b-2 border-black pb-">
                                             {lesson.title}
