@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useParams, useNavigate } from "react-router-dom"
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
+
 import LessonRenderer from "../renderer.jsx/LessonRenderer"
 
 export default function AdminPreview() {
@@ -15,7 +17,7 @@ export default function AdminPreview() {
     const token = localStorage.getItem("adminToken")
 
     axios
-      .get(`http://localhost:5000/lesson/${id}`, {
+      .get(`${apiBase}/lesson/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

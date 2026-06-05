@@ -5,6 +5,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { GoogleLogin } from "@react-oauth/google"
 import { useEffect } from "react"
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Signin() {
     const navigate = useNavigate()
     const [email, setEmail] = useState("")
@@ -22,7 +23,7 @@ export default function Signin() {
             setPassErr("provide password")
         }
         else {
-            axios.post("http://localhost:5000/usersignin", { email: email, password: password })
+            axios.post(`${apiBase}/usersignin`, { email: email, password: password })
                 .then((response) => {
                     const token = response.data.token
                     localStorage.setItem("token", token)
@@ -59,10 +60,9 @@ export default function Signin() {
                         <h5 className=" text-white">Create an Account</h5>
                         <GoogleLogin className="object-contain cursor-pointer ml-3 hover:translate-y-2 hover:skew-1 "
                             onSuccess={(credentialResponse) => {
-                                console.log("FULL RESPONSE:", credentialResponse)
-                                console.log("TOKEN:", credentialResponse?.credential)
+
                                 const token = credentialResponse.credential
-                                axios.post("http://localhost:5000/google-auth", { token })
+                                axios.post(`${apiBase}/google-auth`, { token })
                                     .then((response) => {
                                         localStorage.setItem("token", response.data.token)
                                       

@@ -4,6 +4,7 @@ import AdminNavBar from "../NavBar/AdminNavBar"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Admin() {
     const navigate = useNavigate()
     const [activeTabs, setActiveTabs] = useState("create")
@@ -61,7 +62,7 @@ export default function Admin() {
             return
         }
 
-        axios.post("http://localhost:5000/lessons", parsedData, { headers: { Authorization: `Bearer ${token}` } })
+        axios.post(`${apiBase}/lessons`, parsedData, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setCreateStatus(res.data.message)
                 setLesson("")
@@ -85,7 +86,7 @@ export default function Admin() {
                 navigate("/adminsignin")
                 return
             }
-            axios.get("http://localhost:5000/getlesson", { headers: { Authorization: `Bearer ${token}` } })
+            axios.get(`${apiBase}/getlesson`, { headers: { Authorization: `Bearer ${token}` } })
                 .then((response) => {
                     setLessonCard(response.data)
                     setLessonFetchError(null)
@@ -115,7 +116,7 @@ export default function Admin() {
             handleUnauthorized()
             return
         }
-        axios.delete(`http://localhost:5000/deletelesson/${selectedId}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.delete(`${apiBase}/deletelesson/${selectedId}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 console.log(res.data.message)
 
@@ -140,7 +141,7 @@ export default function Admin() {
         }
         setSelectEditId(id)
         setEditModalOpen(true)
-        axios.get(`http://localhost:5000/getcurrentjson/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${apiBase}/getcurrentjson/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setCurrJson(JSON.stringify(res.data, null, 2))
                 console.log(res.data)
@@ -177,7 +178,7 @@ export default function Admin() {
         }
 
         axios.put(
-            `http://localhost:5000/updatelesson/${selectEditId}`,
+            `${apiBase}/updatelesson/${selectEditId}`,
             parsed,
             { headers: { Authorization: `Bearer ${token}` } }
         )
@@ -204,7 +205,7 @@ export default function Admin() {
         })
     }
 
-    // Prevent the protected dashboard from flashing while the stored token is being checked.
+    
     if (!isAuthenticated) {
         return null
     }

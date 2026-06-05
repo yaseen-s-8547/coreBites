@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBurger } from "@fortawesome/free-solid-svg-icons"
 export default function DashBoardLayOut() {
     const [isOpen, setIsOpen] = useState(false)
+    const [image, setImage] = useState(null)
+    const [userName, setUserName] = useState("User")
     return (
         <>
             <div className="w-full min-h-screen bg-[radial-gradient(circle_at_7%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]">
@@ -24,11 +26,11 @@ export default function DashBoardLayOut() {
                     className={`fixed top-0 left-0 h-full w-64 bg-black transform transition-transform duration-300 z-50 border border-r-amber-50
                     ${isOpen ? "translate-x-0" : "-translate-x-full"} md:hidden`}
                 >
-                    <SideBar />
+                    <SideBar image={image} setImage={setImage} userName={userName} setUserName={setUserName} />
                 </div>
                 <div className=" grid grid-cols-1 sm:grid-cols-12   ">
                     <div className=" fixed hidden h-screen sm:block sm:col-span-4 md:col-span-3 lg:col-span-3 xl:col-span-2 2xl:col-span-2   border-t-0     ">
-                        <SideBar />
+                        <SideBar image={image} setImage={setImage} userName={userName} setUserName={setUserName} />
                     </div>
                     <div className=" sm:ms-55 md:ms-45 lg:ms-60 xl:ms-53  w-full md:col-span-9 lg:col-span-9 sm:col-span-8 xl:col-span-10 2xl:col-span-10 min-h-screen  ">
                         <Outlet />

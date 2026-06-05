@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
+
 export default function Home() {
 
     const [lessons, setLessons] = useState([])
@@ -16,7 +18,7 @@ export default function Home() {
     useEffect(() => {
         const token = localStorage.getItem("token")
 
-        axios.get("http://localhost:5000/gethomelessons", { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${apiBase}/gethomelessons`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLessons(res.data)
             })
@@ -31,7 +33,7 @@ export default function Home() {
     }, [])
     const handleAddToBag = (lessonId) => {
         const token = localStorage.getItem("token")
-        axios.post(`http://localhost:5000/addtobag/${lessonId}`, {}, { headers: { Authorization: `Bearer ${token}` } })
+        axios.post(`${apiBase}/addtobag/${lessonId}`, {}, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 console.log(res.data.message)
             })
@@ -41,7 +43,7 @@ export default function Home() {
     }
     const handleSearch=(value)=>{
         const token= localStorage.getItem("token")
-        axios.get(`http://localhost:5000/gethomelessons?search=${value}`,{ headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${apiBase}/gethomelessons?search=${value}`,{ headers: { Authorization: `Bearer ${token}` } })
         .then((res)=>{
             setLessons(res.data)
         })
@@ -56,7 +58,7 @@ export default function Home() {
     }
     const handleClear=()=>{
         const token =localStorage.getItem("token")
-           axios.get("http://localhost:5000/gethomelessons", { headers: { Authorization: `Bearer ${token}` } })
+           axios.get(`${apiBase}/gethomelessons`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLessons(res.data)
             })
@@ -111,7 +113,7 @@ export default function Home() {
                             return (
                                 <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-80 max-h-110.5   mt-5 md:ms-3 relative bg-white rounded-xl p-5 flex flex-col justify-between gap-6`}>
                                     <div className="pr-14">
-                                        <h1 className="line-clamp-2 text-black font-bold text-3xl sm:text-4xl leading-tight border-b-2 border-black pb-3">
+                                        <h1 className="line-clamp-2 text-black font-bold text-3xl sm:text-4xl leading-tight border-b-2 border-black pb-">
                                             {lesson.title}
                                         </h1>
                                         <p className="line-clamp-3 text-gray-700 font-light mt-4 leading-relaxed">

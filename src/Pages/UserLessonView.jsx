@@ -2,6 +2,8 @@ import axios from "axios"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
+
 import LessonRenderer from "../renderer.jsx/LessonRenderer"
 
 const INTERACTIVE_SECTION_TYPES = new Set([
@@ -38,7 +40,7 @@ function UserLessonSession({ lessonId }) {
     let shouldIgnore = false
 
     axios
-      .get("http://localhost:5000/getyourlessons", {
+      .get(`${apiBase}/getyourlessons`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {

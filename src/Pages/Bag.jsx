@@ -3,6 +3,7 @@ import { faBriefcase, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Bag() {
 
     const [bag, setBag] = useState([])
@@ -12,7 +13,7 @@ export default function Bag() {
     
     useEffect(() => {
         const token = localStorage.getItem("token")
-        axios.get("http://localhost:5000/getbag",  { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${apiBase}/getbag`,  { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 console.log("BAG DATA:", res.data)
                 setBag(res.data)
@@ -35,7 +36,7 @@ export default function Bag() {
 
    const handleDeleteBagItem=(id)=>{
          const token = localStorage.getItem("token")
-         axios.delete(`http://localhost:5000/deletebagitem/${id}`,{headers:{Authorization:`Bearer ${token}`}})
+         axios.delete(`${apiBase}/deletebagitem/${id}`,{headers:{Authorization:`Bearer ${token}`}})
          .then((res)=>{
             setBag(prev=>prev.filter((item)=>item.lessonId?._id!==res.data.id)  )
             setIsModalId(null)

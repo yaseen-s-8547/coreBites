@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Paywall() {
     const { id } = useParams()
     const [lesson, setLesson] = useState([])
@@ -9,7 +10,7 @@ export default function Paywall() {
     const[isBuying,setIsBuying]=useState(false)
     useEffect(() => {
         const token = localStorage.getItem("token")
-        axios.get(`http://localhost:5000/buyinglessondetails/${id}`, { headers: { Authorization: `Bearer ${token}` } })
+        axios.get(`${apiBase}/buyinglessondetails/${id}`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLesson(res.data)
             })
@@ -19,13 +20,14 @@ export default function Paywall() {
     const handleBuyLesson = (id) => {
         setIsBuying(true)
         const token = localStorage.getItem("token")
-        axios.post(`http://localhost:5000/buyalesson/${id}`, {}, { headers: { Authorization: `Bearer ${token}` } })
+        axios.post(`${apiBase}/buyalesson/${id}`, {}, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
-                setIsBuying(false)
+                setIsBuying(true)
                  setTimeout(() => {
                  setBuyStatus(res.data.message) 
+
                  navigate("/app/lesson")   
-                },6000);
+                },2000);
                 
                 
                 

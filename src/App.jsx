@@ -14,6 +14,8 @@ import Paywall from './Components/Paywall'
 import UserLessonView from './Pages/UserLessonView'
 import About from './Pages/About'
 import AdminSignin from './Pages/AdminSignin'
+import Pricing from './Pages/Pricing'
+import Contact from './Pages/Contact'
 function App() {
 
 
@@ -32,6 +34,8 @@ function App() {
           <Route path="lesson" element={<Lesson />} />
           <Route path="bag" element={<Bag />} />
           <Route path="about" element={<About/>}/>
+          <Route path="pricing" element={<Pricing/>} />
+          <Route path="Contact" element={<Contact/>}/>
         </Route>
       </Routes>
       <Routes>

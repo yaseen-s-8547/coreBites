@@ -6,7 +6,7 @@ export default function AdminNavBar({ activeTabs, setActiveTabs }) {
       const navigate= useNavigate()
       const handleAdminLogOut=()=>{
         localStorage.removeItem("adminToken")
-        navigate("/app/home")
+        navigate("/")
       }
     return (
 
