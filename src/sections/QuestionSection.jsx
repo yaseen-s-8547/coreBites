@@ -8,7 +8,11 @@ export default function QuestionSection({ section, onComplete }) {
   const quizBlock = section.blocks.find((b) => b.type === "quiz")
 
   const questionText =
-    textBlock?.content || textBlock?.prompt || textBlock?.question ||
+    textBlock?.content ||
+    textBlock?.prompt ||
+    textBlock?.question ||
+    quizBlock?.question ||
+    quizBlock?.prompt ||
     "No question text provided."
   const options = Array.isArray(quizBlock?.options) ? quizBlock.options : []
   const answer = quizBlock?.answer
