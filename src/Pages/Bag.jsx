@@ -60,19 +60,19 @@ export default function Bag() {
         <>
 
             <div className="grid grid-cols-12  ms-10 h-25 mt-2 ">
-                <div className="col-span-2"></div>
-                <div className="col-span-8  ">
-                    <div className="flex flex-row justify-center  items-center w-full h-full">
-                        <h1 className="text-5xl font-bold  text-white border-b-2 pb-3  border-white"><FontAwesomeIcon icon={faBriefcase} className='text-white' /> Your Bag</h1>
+                <div className="lg:col-span-2 md:col-span-1"></div>
+                <div className="col-span-12  lg:col-span-8 md:col-span-10 ">
+                    <div className="flex flex-row justify-start md:justify-center  md:me-0  items-center w-full h-full">
+                        <h1 className="  text-2xl md:text-5xl font-bold  text-white border-b-2 pb-3  border-white"><FontAwesomeIcon icon={faBriefcase} className='text-white' /> Your Bag</h1>
                     </div>
                 </div>
-                <div className="col-span-2"></div>
+                <div className="lg:col-span-2 md:col-span-1"></div>
             </div>
 
             {isBag === false ? (
 
                 <>
-                    <h1 className="ms-10 mt-10 font-bold text-xl text-white mx-auto ">{bagErr}</h1>
+                    <h1 className="ms-10 mt-10 font-bold   md:text-xl text-center text-white mx-auto ">{bagErr}</h1>
                 </>
 
             )

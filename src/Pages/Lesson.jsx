@@ -4,14 +4,29 @@ import { useNavigate } from "react-router-dom"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Lesson() {
   const [yourLesson, setYourLesson] = useState([])
-  
+  const [lessonErr,setLessonErr]=useState("")
   useEffect(() => {
     const token = localStorage.getItem("token")
 
     axios.get(`${apiBase}/getyourlessons`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
        
-        setYourLesson(res.data)
+        setYourLesson(res.data.lessons)
+
+  if (res.data.lessons.length === 0) {
+    setLessonErr("Purchase a lesson first")
+  }
+      })
+      .catch((err)=>{
+       
+          if(err.response.status===404){
+             setLessonErr("no user found")
+
+        }
+        if(err.response.status===500){
+          setLessonErr("server error")
+        }
+
       })
 
   }, [])
@@ -24,6 +39,14 @@ export default function Lesson() {
     <>
 
 
+      {lessonErr?(<>
+      
+      <h1 className="ms-10">{lessonErr}</h1>
+      
+      </>
+      ):(
+        
+        <>
       <div className=" grid grid-cols-12 gap-5 p-5 md:p-0 md:ms-15 ms-0 sm:ms-10 mt-5 ">
         {yourLesson.map((lesson) => (
           <div key={lesson._id} className="col-span-12 min-h-65 gap-y-5 p-5 sm:col-span-6 rounded-xl md:col-span-6  bg-white lg:col-span-4 ">
@@ -38,6 +61,11 @@ export default function Lesson() {
         ))}
       </div>
 
+      
+      
+      
+      </>
+    )}
 
 
     </>
