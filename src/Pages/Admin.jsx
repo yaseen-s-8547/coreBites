@@ -253,7 +253,7 @@ export default function Admin() {
                                                     {info.synopsis?.tagline}
                                                 </p>
                                                 </div>
-                                                <button className="mt-6 bg-black text-white font-bold py-3 rounded-md hover:bg-white hover:text-black border border-black cursor-pointer" onClick={() => navigate(`preview/${info._id}`)}>
+                                                <button className="mt-6 bg-black text-white font-bold py-3 rounded-md hover:bg-white hover:text-black border border-black cursor-pointer" onClick={() => navigate(`/admin/preview/${info._id}`)}>
                                                     Preview
                                                 </button>
                                             </div>

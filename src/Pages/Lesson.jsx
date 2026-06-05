@@ -4,12 +4,13 @@ import { useNavigate } from "react-router-dom"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Lesson() {
   const [yourLesson, setYourLesson] = useState([])
+  
   useEffect(() => {
     const token = localStorage.getItem("token")
 
     axios.get(`${apiBase}/getyourlessons`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
-        console.log(res)
+       
         setYourLesson(res.data)
       })
 
