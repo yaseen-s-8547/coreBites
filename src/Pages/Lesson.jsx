@@ -11,9 +11,9 @@ export default function Lesson() {
     axios.get(`${apiBase}/getyourlessons`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
        
-        setYourLesson(res.data.lessons)
+        setYourLesson(res.data)
 
-  if (res.data.lessons.length === 0) {
+  if (res.data.length === 0) {
     setLessonErr("Purchase a lesson first")
   }
       })
@@ -42,7 +42,6 @@ export default function Lesson() {
       {lessonErr?(<>
       
       <h1 className="ms-10">{lessonErr}</h1>
-      
       </>
       ):(
         

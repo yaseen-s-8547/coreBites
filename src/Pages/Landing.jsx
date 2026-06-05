@@ -22,8 +22,8 @@ export default function Landing() {
 
                                 <div className=" md:col-span-12 xl:col-span-6 py-8 text-center  ml-1  text-white  overflow-x-hidden overflow-y-hidden ">
                                         <h1 className=" text-6xl  sm:text-8xl  text-center xl:text-center md:text-center font-semibold ms-5 sm:me-0 md:me-8 ">BUILD. BREAK.<br />LEARN.</h1>
-                                        <p className="text-3xl text-center md:text-left font-thin md:ml-2  ms-0 sm:me-0   mt-6 ">Precision learning built to turn complex concepts into clear understanding.</p>
-                                        <div className="md:flex md:flex-row md:justify-start md:mr-12 flex flex-col  gap mt-8 ms-3 mr-3   gap-6 " >
+                                        <p className="text-3xl text-center md:text-left font-thin ml-0 md:ml-8    mt-6 ">Precision learning built to turn complex concepts into clear understanding.</p>
+                                        <div className="md:flex md:flex-row md:justify-start  md:ml-8 flex flex-col  gap mt-8    gap-6 " >
                                                 <button className="bg-white text-black   md:w-full xl:w-62 hover:bg-black hover:text-white hover:translate-y-0.5 h-16   flex flex-row justify-center items-center font-semibold rounded-2xl p-4 text-4xl" onClick={handleSignUp}>Sign Up</button>
                                                 <button className="bg-white text-black  md:w-full xl:w-62 hover:bg-black hover:text-white hover:translate-y-0.5 h-16  flex flex-row justify-center items-center font-semibold rounded-2xl p-4 text-4xl" onClick={handleComeIn}>Come in</button>
                                         </div>
