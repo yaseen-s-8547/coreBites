@@ -46,8 +46,8 @@ export default function Paywall() {
 
             <div className="w-full flex justify-center  p-5 sm:px-5   min-h-screen bg-[radial-gradient(circle_at_7%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]">
 
-                <div className="  flex flex-col gap-4 max-w-3xl  md:mt-27 min-h-96   max-h-130.5 bg-white rounded-xl shadow overflow-scroll"  >
-                    <div className="  p-7 ps-3 border-b-2 h-27 border-black line-clamp-1 text-2xl font-bolder">
+                <div className="  flex flex-col gap-4 max-w-3xl  md:mt-27   self-start  bg-white rounded-xl shadow "  >
+                    <div className="  p-7 ps-3 pb-6 border-b-2  border-black line-clamp-1 text-2xl font-bolder">
                         <h1 className="text-left text-sm font-bold md:text-lg">Title: {lesson?.title}</h1>
                     </div>
                     <div className="ps-5 pe-5 pt-3 ">
@@ -65,7 +65,7 @@ export default function Paywall() {
                     <div className="ps-5 pe-5  md:pt-3 ">
                         <p>Price:<span className="text-green-700">{lesson?.price}</span> </p>
                     </div>
-                    <button className="bg-green-700 hover:bg-red-700 text-white hover:text-white rounded-t-none w-full max-w-3xl rounded-xl shadow p-5 " onClick={() => handleBuyLesson(lesson._id)}>{isBuying?<p>loading....</p>:buyStatus || <p>Buy Now</p>}</button>
+                    <button className="bg-green-700   hover:bg-red-700 text-white hover:text-white rounded-t-none w-full max-w-3xl rounded-xl shadow p-5 " onClick={() => handleBuyLesson(lesson._id)}>{isBuying?<p>loading....</p>:buyStatus || <p>Buy Now</p>}</button>
 
                 </div>
 

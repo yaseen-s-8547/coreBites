@@ -19,7 +19,7 @@ export default function Navbar(){
         <h1 className="text-white text-3xl zen-dots-regular ">CoreBites</h1>
         </div>
       </div>
-    <div className="col-span-8  flex flex-row justify-center gap-7 ml-7 md:justify-evenly items-center relative text-white  ">
+    <div className="col-span-8  flex flex-row justify-center gap-7  sm:ml-7 md:justify-evenly items-center relative text-white  ">
      
         <span className="text-3xl cursor-pointer hover:text-gray-600" onClick={handleAdminClick}>Admin</span>
         

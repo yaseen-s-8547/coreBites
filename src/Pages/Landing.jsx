@@ -20,11 +20,11 @@ export default function Landing() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-12 items-center w-full flex-1 bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]">
 
-                                <div className=" md:col-span-12 xl:col-span-6 py-8 text-center  ml-8  text-white  overflow-x-hidden overflow-y-hidden ">
-                                        <h1 className="text-8xl text-center xl:text-center md:text-center font-semibold mr-8 ">BUILD. BREAK.<br />LEARN.</h1>
-                                        <p className="text-3xl text-center md:text-left font-thin md:ml-2  ml-2   mt-6 ">Precision learning built to turn complex concepts into clear understanding.</p>
-                                        <div className="md:flex md:flex-row md:justify-start md:mr-12 flex flex-col  gap mt-8 mr-5   gap-6 " >
-                                                <button className="bg-white text-black  md:w-full xl:w-62 hover:bg-black hover:text-white hover:translate-y-0.5 h-16   flex flex-row justify-center items-center font-semibold rounded-2xl p-4 text-4xl" onClick={handleSignUp}>Sign Up</button>
+                                <div className=" md:col-span-12 xl:col-span-6 py-8 text-center  ml-1  text-white  overflow-x-hidden overflow-y-hidden ">
+                                        <h1 className=" text-6xl  sm:text-8xl  text-center xl:text-center md:text-center font-semibold ms-5 sm:me-0 md:me-8 ">BUILD. BREAK.<br />LEARN.</h1>
+                                        <p className="text-3xl text-center md:text-left font-thin md:ml-2  ms-0 sm:me-0   mt-6 ">Precision learning built to turn complex concepts into clear understanding.</p>
+                                        <div className="md:flex md:flex-row md:justify-start md:mr-12 flex flex-col  gap mt-8 ms-3 mr-3   gap-6 " >
+                                                <button className="bg-white text-black   md:w-full xl:w-62 hover:bg-black hover:text-white hover:translate-y-0.5 h-16   flex flex-row justify-center items-center font-semibold rounded-2xl p-4 text-4xl" onClick={handleSignUp}>Sign Up</button>
                                                 <button className="bg-white text-black  md:w-full xl:w-62 hover:bg-black hover:text-white hover:translate-y-0.5 h-16  flex flex-row justify-center items-center font-semibold rounded-2xl p-4 text-4xl" onClick={handleComeIn}>Come in</button>
                                         </div>
                                 </div>
