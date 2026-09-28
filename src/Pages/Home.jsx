@@ -26,11 +26,12 @@ export default function Home() {
                 setLessonFetchError(true)
                 setError(err.response?.data?.message || "Unable to fetch lessons")
                 if (err.response?.data?.message === "no token found") {
+                     localStorage.removeItem("token")
                      navigate("/signin")
                 }
 
             })
-    }, [])
+    }, [navigate])
     const handleAddToBag = (lessonId) => {
         const token = localStorage.getItem("token")
         axios.post(`${apiBase}/addtobag/${lessonId}`, {}, { headers: { Authorization: `Bearer ${token}` } })
@@ -51,6 +52,7 @@ export default function Home() {
                 setLessonFetchError(true)
                 setError(err.response?.data?.message || "Unable to fetch lessons")
                 if (err.response?.data?.message === "no token found") {
+                     localStorage.removeItem("token")
                      navigate("/signin")
                 }
 
@@ -66,6 +68,7 @@ export default function Home() {
                 setLessonFetchError(true)
                 setError(err.response?.data?.message || "Unable to fetch lessons")
                 if (err.response?.data?.message === "no token found") {
+                     localStorage.removeItem("token")
                      navigate("/signin")
                 }
 
@@ -90,7 +93,7 @@ export default function Home() {
                         <div className="lg:col-span-6 lg:col-start-4 md:col-span-8 md:col-start-2
                  ">
                             <div className=" p-5 md:p-3 flex flex-row justify-center items-center h-full">
-                                <input className="bg-white h-14 ps-3 text-black w-2xl rounded-lg border border-black" placeholder="live search" value={search} onChange={(e)=>{
+                                <input className="bg-cb-surface h-14 ps-3 text-cb-ink w-2xl rounded-cb-md border border-cb-border" placeholder="live search" value={search} onChange={(e)=>{
                                     const value =e.target.value
                                     setSearch(value)
                                     
@@ -111,24 +114,24 @@ export default function Home() {
                             const isLarge = index % 4 === 0 || index % 4 === 3
 
                             return (
-                                <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-60 max-h-70.5   mt-5 md:ms-3 relative bg-white rounded-xl p-5 flex flex-col justify-between gap-6`}>
+                                <div key={lesson._id} className={`${isLarge ? "xl:col-span-8 lg:col-span-6 col-span-12" : "xl:col-span-4 lg:col-span-6 col-span-12"} min-h-60 max-h-70.5 mt-5 md:ms-3 relative bg-cb-surface rounded-cb-md p-5 flex flex-col justify-between gap-6`}>
                                     <div className="pr-14">
-                                        <h1 className="line-clamp-2 text-black font-bold text-3xl sm:text-4xl leading-tight border-b-2 border-black pb-">
+                                        <h1 className="font-heading line-clamp-2 text-cb-ink font-bold text-3xl sm:text-4xl leading-tight border-b-2 border-cb-ink pb-">
                                             {lesson.title}
                                         </h1>
-                                        <p className="line-clamp-3 text-gray-700 font-light mt-4 leading-relaxed">
+                                        <p className="line-clamp-3 text-cb-muted font-light mt-4 leading-relaxed">
                                             {lesson.synopsis?.tagline}
                                         </p>
                                     </div>
 
                                     <div className="flex items-end justify-between gap-4 pr-14">
-                                        <p className="text-black">
-                                            price : <span className="text-green-700 font-semibold">{lesson.isDemo ? "Demo" : lesson.isFree ? "Free" : `Rs. ${lesson.price}`}</span>
+                                        <p className="text-cb-ink">
+                                            price : <span className="text-cb-ink font-semibold">{lesson.isDemo ? "Demo" : lesson.isFree ? "Free" : `Rs. ${lesson.price}`}</span>
                                         </p>
                                     </div>
 
                                     <div className="absolute top-3 right-3 md:right-5 justify-center items-center flex flex-col gap-2">
-                                        <button className="bg-black text-white flex items-center justify-center h-8 w-8 font-bold rounded-xl hover:bg-gray-500 hover:text-white" ><FontAwesomeIcon onClick={() => handleAddToBag(lesson._id)} icon={faBriefcase} className='text-white' /></button>
+                                        <button className="bg-cb-primary text-cb-primary-contrast flex items-center justify-center h-8 w-8 font-bold rounded-cb-sm hover:bg-cb-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus" aria-label={`Add ${lesson.title} to your bag`} onClick={() => handleAddToBag(lesson._id)}><FontAwesomeIcon icon={faBriefcase} className="text-cb-primary-contrast" aria-hidden="true" /></button>
                                     </div>
                                 </div>
 

@@ -1,10 +1,10 @@
 
 import './App.css'
-import { Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
 import Landing from './Pages/Landing'
 import Home from './Pages/Home'
 import Signup from './Pages/Signup'
-import Signin from "./Pages/Signin"
+import Signin from './Pages/Signin'
 import DashBoardLayOut from './LayOut/DashBoardLayOut'
 import Lesson from './Pages/Lesson'
 import Bag from './Pages/Bag'
@@ -16,43 +16,67 @@ import About from './Pages/About'
 import AdminSignin from './Pages/AdminSignin'
 import Pricing from './Pages/Pricing'
 import Contact from './Pages/Contact'
-function App() {
 
+function RequireLearnerAuth() {
+  const location = useLocation()
 
+  return localStorage.getItem('token') ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/signin" replace state={{ from: location }} />
+  )
+}
+
+function RequireAdminAuth() {
+  const location = useLocation()
+
+  return localStorage.getItem('adminToken') ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/adminSignin" replace state={{ from: location }} />
+  )
+}
+
+function NotFound() {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/signup" element={<Signup />} />
-        
-      </Routes>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-6 text-center">
+      <h1 className="text-3xl font-bold">Page not found</h1>
+      <p>The page you requested does not exist.</p>
+      <Link to="/">Return home</Link>
+    </main>
+  )
+}
 
-      <Routes>
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/signin" element={<Signin />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/adminSignin" element={<AdminSignin />} />
+
+      <Route element={<RequireLearnerAuth />}>
         <Route path="/app" element={<DashBoardLayOut />}>
+          <Route index element={<Navigate to="/app/home" replace />} />
           <Route path="home" element={<Home />} />
           <Route path="lesson" element={<Lesson />} />
           <Route path="bag" element={<Bag />} />
-          <Route path="about" element={<About/>}/>
-          <Route path="pricing" element={<Pricing/>} />
-          <Route path="Contact" element={<Contact/>}/>
+          <Route path="about" element={<About />} />
+          <Route path="pricing" element={<Pricing />} />
+          <Route path="contact" element={<Contact />} />
         </Route>
-      </Routes>
-      <Routes>
-        <Route path="/paywall/:id" element={<Paywall/>} />
-      </Routes>
-      <Routes>
-        <Route path="/learn/:id" element={<UserLessonView/>}/>
+        <Route path="/learn/:id" element={<UserLessonView />} />
+        <Route path="/paywall/:id" element={<Paywall />} />
+      </Route>
+
+      <Route element={<RequireAdminAuth />}>
         <Route path="/admin" element={<Admin />} />
-        <Route path="/adminSignin" element={<AdminSignin/>}/>
         <Route path="/admin/preview/:id" element={<AdminPreview />} />
-     </Routes>
+      </Route>
 
-    </>
-
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   )
-
-
 }
 
 export default App

@@ -29,9 +29,9 @@ function UserLessonSession({ lessonId }) {
   const [completedSections, setCompletedSections] = useState({})
   const [lessonFinished, setLessonFinished] = useState(false)
 
-  const sectionRefs = useRef([])
-  const skipFirstScroll = useRef(true)
-
+  const sectionRefs = useRef([])    
+  const skipFirstScroll = useRef(true)     
+  
   useEffect(() => {
     if (!token) {
       return

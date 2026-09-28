@@ -1,1 +1,65 @@
 @import "tailwindcss";
+
+@theme {
+	--font-sans: "Open Sans", sans-serif;
+	--font-display: "IBM Plex Serif", serif;
+	--font-heading: "IBM Plex Serif", serif;
+	--font-brand: "Zen Dots", sans-serif;
+	--background-image-cb-atmosphere: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.25), transparent 40%), radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.15), transparent 35%), linear-gradient(to right, #000000, #000000);
+	--background-image-cb-atmosphere-subtle: radial-gradient(circle at 7% 30%, rgba(255, 255, 255, 0.25), transparent 40%), radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.15), transparent 35%), linear-gradient(to right, #000000, #000000);
+
+	--text-cb-xs: 0.75rem;
+	--text-cb-xs--line-height: 1rem;
+	--text-cb-sm: 0.875rem;
+	--text-cb-sm--line-height: 1.25rem;
+	--text-cb-base: 1rem;
+	--text-cb-base--line-height: 1.6rem;
+	--text-cb-lg: 1.125rem;
+	--text-cb-lg--line-height: 1.75rem;
+	--text-cb-xl: 1.25rem;
+	--text-cb-xl--line-height: 1.75rem;
+	--text-cb-2xl: 1.5rem;
+	--text-cb-2xl--line-height: 2rem;
+	--text-cb-3xl: 1.875rem;
+	--text-cb-3xl--line-height: 2.25rem;
+
+	--font-weight-cb-regular: 400;
+	--font-weight-cb-medium: 500;
+	--font-weight-cb-semibold: 600;
+	--font-weight-cb-bold: 700;
+
+	--leading-cb-tight: 1.25;
+	--leading-cb-body: 1.6;
+	--leading-cb-relaxed: 1.75;
+
+	--spacing-cb-1: 0.25rem;
+	--spacing-cb-2: 0.5rem;
+	--spacing-cb-3: 0.75rem;
+	--spacing-cb-4: 1rem;
+	--spacing-cb-5: 1.25rem;
+	--spacing-cb-6: 1.5rem;
+	--spacing-cb-8: 2rem;
+	--spacing-cb-10: 2.5rem;
+	--spacing-cb-12: 3rem;
+
+	--radius-cb-sm: 0.25rem;
+	--radius-cb-md: 0.5rem;
+	--radius-cb-lg: 0.75rem;
+
+	--color-cb-canvas: #f5f5f5;
+	--color-cb-surface: #ffffff;
+	--color-cb-surface-muted: #f0f0f0;
+	--color-cb-ink: #000000;
+	--color-cb-text: #222222;
+	--color-cb-muted: #666666;
+	--color-cb-border: #d6d6d6;
+	--color-cb-primary: #000000;
+	--color-cb-primary-hover: #292929;
+	--color-cb-primary-contrast: #ffffff;
+	--color-cb-danger: #111111;
+	--color-cb-danger-hover: #333333;
+	--color-cb-danger-surface: #f0f0f0;
+	--color-cb-focus: #737373;
+
+	--shadow-cb-sm: 0 1px 2px rgb(0 0 0 / 8%);
+}

@@ -19,13 +19,13 @@ export default function AdminNavBar({ activeTabs, setActiveTabs }) {
                             className="rounded-top w-8 h-6 md:ml-24"
                             alt="noLogo"
                         />
-                        <h1 className="text-white text-3xl zen-dots-regular ">CoreBites</h1>
+                        <h1 className="text-white text-3xl zen-dots-regular">CoreBites</h1>
                     </div>
                 </div>
                 <div className="col-span-8  flex flex-row justify-center gap-7 ml-7 md:justify-evenly items-center relative text-white  ">
-                    <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs === "create" ? "text-gray-600" : "text-white"}`} onClick={() => setActiveTabs("create")}>Create</span>
-                    <span className={`text-3xl cursor-pointer hover:text-gray-600 ${activeTabs === "read" ? "text-gray-600" : "text-white"}`} onClick={() => setActiveTabs("read")}>Manage</span>
-                    <button className="w-10 h-10 block bg-white right-3 text-black rounded-lg absolute md:right-3 md:w-7 md:h-7 md:top-3 sm:bottom-5 bottom-17    hover:bg-red-800 hover:text-white  " onClick={handleAdminLogOut}><FontAwesomeIcon icon={faDoorOpen} className="text-lg  text-center" /></button>
+                    <span className={`text-3xl cursor-pointer hover:text-white ${activeTabs === "create" ? "text-white" : "text-white/60"}`} onClick={() => setActiveTabs("create")}>Create</span>
+                    <span className={`text-3xl cursor-pointer hover:text-white ${activeTabs === "read" ? "text-white" : "text-white/60"}`} onClick={() => setActiveTabs("read")}>Manage</span>
+                    <button className="w-10 h-10 block bg-cb-surface right-3 text-cb-ink rounded-cb-md absolute md:right-3 md:w-7 md:h-7 md:top-3 sm:bottom-5 bottom-17 hover:bg-cb-surface-muted" onClick={handleAdminLogOut}><FontAwesomeIcon icon={faDoorOpen} className="text-lg text-center" /></button>
                 </div>
             </>
         </>

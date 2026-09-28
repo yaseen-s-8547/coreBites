@@ -25,7 +25,8 @@ export default function AdminPreview() {
       })
       .catch((err) => {
         if (err.response?.status === 401) {
-          navigate("/app/admin")
+          localStorage.removeItem("adminToken")
+          navigate("/adminSignin", { replace: true })
         } else {
           setError("Failed to load lesson")
         }
@@ -33,15 +34,15 @@ export default function AdminPreview() {
   }, [id, navigate])
 
   if (!lesson) {
-    return <div className="text-white p-6">Loading...</div>
+    return <div className="min-h-screen bg-cb-atmosphere text-white p-6">Loading...</div>
   }
 
   if (error) {
-    return <div className="text-red-400 p-6">{error}</div>
+    return <div className="min-h-screen bg-cb-atmosphere text-white p-6">{error}</div>
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-cb-atmosphere text-white">
       <LessonRenderer lesson={lesson} />
     </div>
   )

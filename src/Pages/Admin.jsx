@@ -24,7 +24,7 @@ export default function Admin() {
     const handleUnauthorized = useCallback(() => {
         localStorage.removeItem("adminToken")
         setIsAuthenticated(false)
-        navigate("/adminsignin")
+        navigate("/adminSignin")
     }, [navigate])
 
     useEffect(() => {
@@ -32,7 +32,7 @@ export default function Admin() {
         const token = localStorage.getItem("adminToken")
 
         if (!token) {
-            navigate("/adminsignin")
+            navigate("/adminSignin")
             return
         }
 
@@ -83,7 +83,7 @@ export default function Admin() {
             
             if (!token) {
                 // There is no token to clear; redirect before attempting the protected request.
-                navigate("/adminsignin")
+                navigate("/adminSignin")
                 return
             }
             axios.get(`${apiBase}/getlesson`, { headers: { Authorization: `Bearer ${token}` } })
@@ -212,19 +212,19 @@ export default function Admin() {
 
     return (
         <>
-                        <div className="grid grid-cols-1 md:grid-cols-12 md:ms-4  lg:ms-0   min-h-26  w-full bg-black border-b border-white " >
+                        <div className="grid grid-cols-1 md:grid-cols-12 md:ms-4 lg:ms-0 min-h-26 w-full bg-cb-ink border-b border-white/20">
 
                             <AdminNavBar activeTabs={activeTabs} setActiveTabs={setActiveTabs} />
 
                         </div>
 
 
-                        <div className="w-full  bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]  flex flex-row justify-center overflow-y-auto min-h-screen">
+                        <div className="w-full bg-cb-atmosphere flex flex-row justify-center overflow-y-auto min-h-screen">
                             {activeTabs === "create" && <><div className="flex flex-col w-68 sm:w-72 md:w-2/4 min-h-96 mt-7 justify-center items-center">
 
                                 <h1 className="text-white text-3xl ">INPUT YOUR JSON HERE</h1>
-                                <textarea value={lesson} onChange={(e) => setLesson(e.target.value)} className=" w-full min-h-96 px-2 mt-12 border text-white border-amber-50" placeholder="input block block types in json format" />
-                                <button onClick={handleLessonCreate} className="mt-7 text-black bg-white hover:bg-black hover:text-white h-19 border cursor-pointer border-white w-45" >Create</button>
+                                <textarea value={lesson} onChange={(e) => setLesson(e.target.value)} className="w-full min-h-96 px-2 mt-12 border text-white border-cb-border" placeholder="input block block types in json format" />
+                                <button onClick={handleLessonCreate} className="mt-7 text-cb-ink bg-cb-surface hover:bg-cb-surface-muted h-19 border cursor-pointer border-cb-border w-45">Create</button>
                                 <p className="text-white">{createStatus}</p>
 
 
@@ -237,23 +237,23 @@ export default function Admin() {
                                 lessonFetchError === null ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 md:ms-4 xl:grid-cols-3 gap-6 w-full px-7 py-6">
                                         {lessonCard.map((info) => (
-                                            <div key={info._id} className="min-h-[290px] flex flex-col justify-between gap-5 border border-gray-300 rounded-xl bg-white p-5 hover:bg-gray-100 cursor-pointer relative">
+                                            <div key={info._id} className="min-h-[290px] flex flex-col justify-between gap-5 border border-cb-border rounded-cb-md bg-cb-surface p-5 hover:bg-cb-surface-muted cursor-pointer relative">
                                                 <div>
-                                                <div className="border-b border-gray-200 pb-3 pr-10">
-                                                    <h1 className="line-clamp-2 text-2xl font-extrabold text-black leading-tight">
+                                                <div className="border-b border-cb-border pb-3 pr-10">
+                                                    <h1 className="font-heading line-clamp-2 text-2xl font-extrabold text-cb-ink leading-tight">
                                                     {info.title}
                                                     </h1>
-                                                    <span className="text-green-700 text-sm "> price:{info.isDemo?"Demo":info.isFree?"Free":`₹${info.price}`}</span>
+                                                    <span className="text-cb-ink text-sm "> price:{info.isDemo?"Demo":info.isFree?"Free":`₹${info.price}`}</span>
                                                 </div>
                                                 
-                                                <FontAwesomeIcon icon={faTrash} className="absolute top-5 right-5 sm:right-1 hover:text-red-700" onClick={() => handleDeleteModal(info._id)} />
-                                                <FontAwesomeIcon icon={faPenToSquare} className="absolute top-10 right-5 sm:right-1 hover:text-blue-900" onClick={() => handleEditModal(info._id)} />
-                                                <p className="line-clamp-3 text-gray-600 mt-3 text-sm font-medium leading-relaxed">
-                                                    <span className="font-bold text-gray-800">Synopsis: </span>
+                                                <FontAwesomeIcon icon={faTrash} className="absolute top-5 right-5 sm:right-1 text-cb-muted hover:text-cb-ink" onClick={() => handleDeleteModal(info._id)} />
+                                                <FontAwesomeIcon icon={faPenToSquare} className="absolute top-10 right-5 sm:right-1 text-cb-muted hover:text-cb-ink" onClick={() => handleEditModal(info._id)} />
+                                                <p className="line-clamp-3 text-cb-muted mt-3 text-sm font-medium leading-relaxed">
+                                                    <span className="font-bold text-cb-ink">Synopsis: </span>
                                                     {info.synopsis?.tagline}
                                                 </p>
                                                 </div>
-                                                <button className="mt-6 bg-black text-white font-bold py-3 rounded-md hover:bg-white hover:text-black border border-black cursor-pointer" onClick={() => navigate(`preview/${info._id}`)}>
+                                                <button className="mt-6 bg-cb-primary text-cb-primary-contrast font-bold py-3 rounded-cb-sm hover:bg-cb-surface hover:text-cb-ink border border-cb-primary cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus" onClick={() => navigate(`/admin/preview/${info._id}`)}>
                                                     Preview
                                                 </button>
                                             </div>
@@ -266,7 +266,7 @@ export default function Admin() {
 
                             {modalOpen && (<div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
 
-                                <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
+                                <div className="bg-cb-surface p-6 rounded-cb-md w-80 shadow-cb-sm">
 
                                     <h2 className="text-lg font-bold mb-4">
                                         Are you sure you want to delete?
@@ -274,14 +274,14 @@ export default function Admin() {
 
                                     <div className="flex justify-end gap-3">
 
-                                        <button className="hover:bg-black hover:text-white p-4 "
+                                        <button className="hover:bg-cb-ink hover:text-white p-4"
                                             onClick={() => setModalOpen(false)}
                                         >
                                             Cancel
                                         </button>
 
                                         <button
-                                            className="hover:bg-red-700 hover:text-white p-4 hover:font-bold "
+                                            className="hover:bg-cb-ink hover:text-white p-4 hover:font-bold"
                                             onClick={() => handleDeleteLesson(selectedId)}
                                         >
                                             Delete
@@ -296,12 +296,12 @@ export default function Admin() {
                             {editModalOpen && (
                                 <>
                                     <div className="fixed inset-0 flex justify-center items-center lg:ms-10 md:ms-20 sm:ms-55 ">
-                                        <div className="bg-white md:w-md  sm:w-sm  lg:w-lg xl:w-2xl h-9/10 p-4 md:p-4 rounded-lg shadow-lg flex flex-col justify-center gap-4 items-center">
-                                            <h1 className="font-bold text-4xl text-black border border-b-2 border-t-0 border-l-0 border-r-0 border-gray-500">Edit</h1>
-                                            <textarea className="bg-black border text-white border-amber-50 h-full w-full placeholder-amber-100" placeholder="edit json" value={currJson} onChange={(e) => setCurrJson(e.target.value)} />
+                                        <div className="bg-cb-surface md:w-md sm:w-sm lg:w-lg xl:w-2xl h-9/10 p-4 md:p-4 rounded-cb-md shadow-cb-sm flex flex-col justify-center gap-4 items-center">
+                                            <h1 className="font-heading font-bold text-4xl text-cb-ink border border-b-2 border-t-0 border-l-0 border-r-0 border-cb-border">Edit</h1>
+                                            <textarea className="bg-cb-ink border text-white border-cb-border h-full w-full placeholder-white/60" placeholder="edit json" value={currJson} onChange={(e) => setCurrJson(e.target.value)} />
                                             <div className="flex flex-row justify-center items-center gap-5">
-                                                <button className="w-25 h-20 bg-black text-white rounded shadow-lg hover:text-black hover:bg-gray-500 hover:text-xl" onClick={handleEditSave} >Save</button>
-                                                <button className="w-25 h-20 bg-black text-white rounded shadow-lg  hover:text-black hover:bg-gray-500 hover:text-xl" onClick={handleEditCancel} >Cancel</button>
+                                                <button className="w-25 h-20 bg-cb-primary text-cb-primary-contrast rounded-cb-sm shadow-cb-sm hover:text-cb-ink hover:bg-cb-surface-muted hover:text-xl" onClick={handleEditSave}>Save</button>
+                                                <button className="w-25 h-20 bg-cb-primary text-cb-primary-contrast rounded-cb-sm shadow-cb-sm hover:text-cb-ink hover:bg-cb-surface-muted hover:text-xl" onClick={handleEditCancel}>Cancel</button>
                                             </div>
                                         </div>
                                     </div>

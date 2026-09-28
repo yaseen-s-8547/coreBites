@@ -1,12 +1,14 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import axios from "axios"
+import Button from "../Components/ui/Button"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function AdminSignin (){
        const [email, setEmail] = useState("")
 const [password, setPassword] = useState("")
 const [error, setError] = useState("")
         const navigate = useNavigate()
+  const location = useLocation()
  const handleSignin = async () => {
 
   setError("")
@@ -26,7 +28,7 @@ const [error, setError] = useState("")
       response.data.token
     )
 
-    navigate("/admin")
+    navigate(location.state?.from || "/admin", { replace: true })
 
   }
   catch (err) {
@@ -42,11 +44,11 @@ const [error, setError] = useState("")
 
     return (
        <>
-  <div className="grid grid-cols-12 w-full min-h-screen bg-[radial-gradient(circle_at_20%_30%,rgba(255,255,255,0.25),transparent_40%),radial-gradient(circle_at_0%_0%,rgba(255,255,255,0.15),transparent_35%),linear-gradient(to_right,#000000,#000000)]">
+  <div className="grid grid-cols-12 w-full min-h-screen bg-cb-atmosphere">
 
     <div className="col-span-12 md:col-span-6 md:col-start-4 h-full flex flex-col justify-start items-center pt-28 gap-6">
 
-      <h1 className="text-center text-white text-4xl font-bold">
+      <h1 className="font-heading text-center text-white text-4xl font-bold">
         Admin Sign in
       </h1>
 
@@ -63,7 +65,7 @@ const [error, setError] = useState("")
             onChange={(e) => {
               setEmail(e.target.value)
             }}
-            className="w-full max-w-lg pl-3 h-10 bg-black text-white border border-white border-solid"
+            className="w-full max-w-lg pl-3 h-10 bg-cb-ink text-white border border-cb-border"
             placeholder="xyz@gmail.com"
           />
         </div>
@@ -79,23 +81,24 @@ const [error, setError] = useState("")
             onChange={(e) => {
               setPassword(e.target.value)
             }}
-            className="pl-3 w-full max-w-lg h-10 bg-black text-white border border-white border-solid"
+            className="pl-3 w-full max-w-lg h-10 bg-cb-ink text-white border border-cb-border"
             placeholder="(eg:world is not enough)"
           />
         </div>
 
         {error && (
-          <p className="text-red-400 px-4 text-sm">
+          <p className="text-white/80 px-4 text-sm">
             {error}
           </p>
         )}
 
-        <button
-          className="w-36 text-lg mt-5 h-12 bg-white font-thin hover:bg-black hover:text-white hover:translate-0.5 ml-4"
+        <Button
+          variant="secondary"
+          className="w-36 h-12 ml-4 mt-5 text-lg font-normal"
           onClick={handleSignin}
         >
           Sign in
-        </button>
+        </Button>
 
       </div>
 

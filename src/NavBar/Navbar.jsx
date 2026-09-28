@@ -21,7 +21,7 @@ export default function Navbar(){
       </div>
     <div className="col-span-8  flex flex-row justify-center gap-7  sm:ml-7 md:justify-evenly items-center relative text-white  ">
      
-        <span className="text-3xl cursor-pointer hover:text-gray-600" onClick={handleAdminClick}>Admin</span>
+        <span className="text-3xl cursor-pointer text-white/70 hover:text-white" onClick={handleAdminClick}>Admin</span>
         
       
     </div>
