@@ -3,11 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDoorOpen } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from "react-router-dom"
 import Tooltip from "../Components/ui/Tooltip"
+import useAuth from "../auth/useAuth"
 export default function AdminNavBar({ activeTabs, setActiveTabs }) {
       const navigate= useNavigate()
+      const { signOut } = useAuth()
       const handleAdminLogOut=()=>{
-        localStorage.removeItem("adminToken")
-        navigate("/")
+        signOut()
+          .catch((error) => console.error("Sign-out request failed:", error))
+          .finally(() => navigate("/", { replace: true }))
       }
     return (
 

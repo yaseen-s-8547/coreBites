@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { getAccessToken } from "../api"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Button from "../Components/ui/Button"
@@ -8,7 +8,7 @@ export default function Lesson() {
   const [yourLesson, setYourLesson] = useState([])
   const [lessonErr,setLessonErr]=useState("")
   useEffect(() => {
-    const token = localStorage.getItem("token")
+    const token = getAccessToken()
 
     axios.get(`${apiBase}/getyourlessons`, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {

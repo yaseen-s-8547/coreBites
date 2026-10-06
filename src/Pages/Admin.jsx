@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react"
-import axios from "axios"
+import axios, { getAccessToken } from "../api"
 import AdminNavBar from "../NavBar/AdminNavBar"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,7 +9,7 @@ const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Admin() {
     const navigate = useNavigate()
     const [activeTabs, setActiveTabs] = useState("create")
-    // Authentication is now determined by the adminToken created on the AdminSignin page.
+    // The route guard restores and validates the admin session before this page mounts.
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [createStatus, setCreateStatus] = useState("")
     const [lesson, setLesson] = useState("")
@@ -21,16 +21,15 @@ export default function Admin() {
     const [selectEditId, setSelectEditId] = useState(null)
     const [currJson, setCurrJson] = useState("")
 
-    // Every missing or rejected adminToken ends the local admin session and returns to sign-in.
+    // The shared API client handles expired access tokens; this is a final UI fallback.
     const handleUnauthorized = useCallback(() => {
-        localStorage.removeItem("adminToken")
         setIsAuthenticated(false)
         navigate("/adminSignin")
     }, [navigate])
 
     useEffect(() => {
-        // AdminSignin owns credential validation; this page only requires its stored adminToken.
-        const token = localStorage.getItem("adminToken")
+        // Protected API requests carry the in-memory access token through the shared client.
+        const token = getAccessToken()
 
         if (!token) {
             navigate("/adminSignin")
@@ -43,7 +42,7 @@ export default function Admin() {
     }, [navigate])
 
     const handleLessonCreate = () => {
-        const token = localStorage.getItem("adminToken")
+        const token = getAccessToken()
         if (!token) {
             handleUnauthorized()
             return
@@ -79,7 +78,7 @@ export default function Admin() {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("adminToken")
+        const token = getAccessToken()
         if (activeTabs === "read") {
             
             if (!token) {
@@ -112,7 +111,7 @@ export default function Admin() {
         setSelectedId(id)
     }
     const handleDeleteLesson = () => {
-        const token = localStorage.getItem("adminToken")
+        const token = getAccessToken()
         if (!token) {
             handleUnauthorized()
             return
@@ -135,7 +134,7 @@ export default function Admin() {
 
     }
     const handleEditModal = (id) => {
-        const token = localStorage.getItem("adminToken")
+        const token = getAccessToken()
         if (!token) {
             handleUnauthorized()
             return
@@ -172,7 +171,7 @@ export default function Admin() {
             return
         }
 
-        const token = localStorage.getItem("adminToken")
+        const token = getAccessToken()
         if (!token) {
             handleUnauthorized()
             return
@@ -238,47 +237,42 @@ export default function Admin() {
                                 lessonFetchError === null ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 md:ms-4 xl:grid-cols-3 gap-6 w-full px-7 py-6">
                                         {lessonCard.map((info) => (
-                                            <div key={info._id} className="min-h-[290px] flex flex-col justify-between gap-5 border border-cb-border rounded-cb-md bg-cb-surface p-5 hover:bg-cb-surface-muted cursor-pointer relative">
-                                                <div>
-                                                <div className="border-b border-cb-border pb-3 pr-10">
-                                                    <h1 className="font-heading line-clamp-2 text-2xl font-extrabold text-cb-ink leading-tight">
-                                                    {info.title}
-                                                    </h1>
-                                                    <span className="text-cb-ink text-sm "> price:{info.isDemo?"Demo":info.isFree?"Free":`₹${info.price}`}</span>
-                                                </div>
-                                                
-                                                <Tooltip
-                                                    label="Delete this lesson"
-                                                    position="left"
-                                                    className="absolute top-4 right-4 sm:right-1"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        aria-label={`Delete ${info.title}`}
-                                                        className="flex size-8 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
-                                                        onClick={() => handleDeleteModal(info._id)}
-                                                    >
-                                                        <FontAwesomeIcon icon={faTrash} aria-hidden="true" />
-                                                    </button>
-                                                </Tooltip>
-                                                <Tooltip
-                                                    label="Edit this lesson"
-                                                    position="left"
-                                                    className="absolute top-12 right-4 sm:right-1"
-                                                >
-                                                    <button
-                                                        type="button"
-                                                        aria-label={`Edit ${info.title}`}
-                                                        className="flex size-8 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
-                                                        onClick={() => handleEditModal(info._id)}
-                                                    >
-                                                        <FontAwesomeIcon icon={faPenToSquare} aria-hidden="true" />
-                                                    </button>
-                                                </Tooltip>
-                                                <p className="line-clamp-3 text-cb-muted mt-3 text-sm font-medium leading-relaxed">
-                                                    <span className="font-bold text-cb-ink">Synopsis: </span>
-                                                    {info.synopsis?.tagline}
-                                                </p>
+                                            <div key={info._id} className="relative flex min-h-72.5 flex-col justify-between gap-5 rounded-cb-md border border-cb-border bg-cb-surface p-4 transition-colors hover:bg-cb-surface-muted sm:p-5">
+                                                <div className="min-w-0">
+                                                    <div className="flex items-center justify-end gap-1">
+                                                        <Tooltip label="Edit this lesson" position="bottom">
+                                                            <button
+                                                                type="button"
+                                                                aria-label={`Edit ${info.title}`}
+                                                                className="flex size-10 items-center justify-center rounded-cb-sm text-cb-muted transition-colors hover:bg-cb-border hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
+                                                                onClick={() => handleEditModal(info._id)}
+                                                            >
+                                                                <FontAwesomeIcon icon={faPenToSquare} aria-hidden="true" />
+                                                            </button>
+                                                        </Tooltip>
+                                                        <Tooltip label="Delete this lesson" position="bottom">
+                                                            <button
+                                                                type="button"
+                                                                aria-label={`Delete ${info.title}`}
+                                                                className="flex size-10 items-center justify-center rounded-cb-sm text-cb-muted transition-colors hover:bg-red-100 hover:text-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
+                                                                onClick={() => handleDeleteModal(info._id)}
+                                                            >
+                                                                <FontAwesomeIcon icon={faTrash} aria-hidden="true" />
+                                                            </button>
+                                                        </Tooltip>
+                                                    </div>
+                                                    <div className="mt-2 min-w-0 border-b border-cb-border pb-3">
+                                                        <h2 className="wrap-break-word font-heading text-xl font-extrabold leading-tight text-cb-ink sm:text-2xl">
+                                                            {info.title}
+                                                        </h2>
+                                                        <span className="mt-1 inline-block text-sm text-cb-ink">
+                                                            Price: {info.isDemo ? "Demo" : info.isFree ? "Free" : `₹${info.price}`}
+                                                        </span>
+                                                    </div>
+                                                    <p className="mt-3 line-clamp-3 text-sm font-medium leading-relaxed text-cb-muted">
+                                                        <span className="font-bold text-cb-ink">Synopsis: </span>
+                                                        {info.synopsis?.tagline}
+                                                    </p>
                                                 </div>
                                                 <button className="mt-6 bg-cb-primary text-cb-primary-contrast font-bold py-3 rounded-cb-sm hover:bg-cb-surface hover:text-cb-ink border border-cb-primary cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus" onClick={() => navigate(`/admin/preview/${info._id}`)}>
                                                     Preview

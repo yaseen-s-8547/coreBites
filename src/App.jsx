@@ -1,7 +1,7 @@
 
 import './App.css'
-import { useEffect } from 'react'
-import { Link, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import useAuth from './auth/useAuth'
 import Landing from './Pages/Landing'
 import Home from './Pages/Home'
 import Signup from './Pages/Signup'
@@ -20,22 +20,30 @@ import Contact from './Pages/Contact'
 
 function RequireLearnerAuth() {
   const location = useLocation()
+  const { status, role } = useAuth()
 
-  return localStorage.getItem('token') ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/signin" replace state={{ from: location }} />
-  )
+  if (status === 'checking') {
+    return <div className="min-h-screen bg-cb-atmosphere" aria-label="Checking session" />
+  }
+  if (status !== 'authenticated') {
+    return <Navigate to="/signin" replace state={{ from: location }} />
+  }
+  if (role !== 'user') return <Navigate to="/admin" replace />
+  return <Outlet />
 }
 
 function RequireAdminAuth() {
   const location = useLocation()
+  const { status, role } = useAuth()
 
-  return localStorage.getItem('adminToken') ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/adminSignin" replace state={{ from: location }} />
-  )
+  if (status === 'checking') {
+    return <div className="min-h-screen bg-cb-atmosphere" aria-label="Checking session" />
+  }
+  if (status !== 'authenticated') {
+    return <Navigate to="/adminSignin" replace state={{ from: location }} />
+  }
+  if (role !== 'admin') return <Navigate to="/app/home" replace />
+  return <Outlet />
 }
 
 function NotFound() {
@@ -49,25 +57,6 @@ function NotFound() {
 }
 
 function App() {
-  const location = useLocation()
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    const handleLearnerSessionExpired = () => {
-      if (location.pathname !== '/signin') {
-        navigate('/signin', {
-          replace: true,
-          state: { sessionExpired: true },
-        })
-      }
-    }
-
-    window.addEventListener('learner-session-expired', handleLearnerSessionExpired)
-    return () => {
-      window.removeEventListener('learner-session-expired', handleLearnerSessionExpired)
-    }
-  }, [location.pathname, navigate])
-
   return (
     <Routes>
       <Route path="/" element={<Landing />} />

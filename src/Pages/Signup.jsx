@@ -1,12 +1,14 @@
 
 import { useState } from "react"
-import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
 import { GoogleLogin } from "@react-oauth/google"
 import Button from "../Components/ui/Button"
+import api from "../api"
+import useAuth from "../auth/useAuth"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Signup() {
     const navigate = useNavigate()
+    const { signIn } = useAuth()
     const [mail, setMail] = useState("")
     const [pass, setPass] = useState("")
     const [err, setErr] = useState("")
@@ -26,7 +28,7 @@ export default function Signup() {
             setPassMissMath("mismatch")
         }
         else {
-            axios.post(`${apiBase}/usersignup`, { email: mail, password: pass })
+            api.post(`${apiBase}/usersignup`, { email: mail, password: pass })
                 .then((res) => {
                     setSignupStatus(res.data.message)
                     setTimeout(() => {
@@ -59,10 +61,10 @@ export default function Signup() {
                     <GoogleLogin className="object-contain cursor-pointer ml-3 hover:translate-y-2 hover:skew-1  border-none"
                         onSuccess={(credentialResponse) => {
                             const token = credentialResponse.credential
-                            axios.post(`${apiBase}/google-auth`, { token })
+                            api.post(`${apiBase}/google-auth`, { token })
                                 .then((response) => {
-                                    setSignupStatus(response.data.message)
-                                    localStorage.setItem("token", response.data.token)
+                                    setSignupStatus("Google account connected")
+                                    signIn(response.data)
                                     navigate("/app/home")
 
                                 })

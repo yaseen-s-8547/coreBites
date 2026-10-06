@@ -1,9 +1,11 @@
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import axios from "axios"
 import Button from "../Components/ui/Button"
+import api from "../api"
+import useAuth from "../auth/useAuth"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function AdminSignin (){
+       const { signIn } = useAuth()
        const [email, setEmail] = useState("")
 const [password, setPassword] = useState("")
 const [error, setError] = useState("")
@@ -15,7 +17,7 @@ const [error, setError] = useState("")
 
   try {
 
-    const response = await axios.post(
+    const response = await api.post(
       `${apiBase}/adminsignin`,
       {
         email,
@@ -23,10 +25,7 @@ const [error, setError] = useState("")
       }
     )
 
-    localStorage.setItem(
-      "adminToken",
-      response.data.token
-    )
+    signIn(response.data)
 
     navigate(location.state?.from || "/admin", { replace: true })
 

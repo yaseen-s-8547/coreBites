@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { getAccessToken } from "../api"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { useParams } from "react-router-dom"
 
@@ -18,7 +18,7 @@ export default function UserLessonView() {
 }
 
 function UserLessonSession({ lessonId }) {
-  const token = localStorage.getItem("token")
+  const token = getAccessToken()
 
   const [lesson, setLesson] = useState(null)
   const [loading, setLoading] = useState(Boolean(token))

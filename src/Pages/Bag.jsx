@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBriefcase, faTrash } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import axios, { getAccessToken } from '../api';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from "../Components/ui/Button"
@@ -36,7 +36,7 @@ export default function Bag() {
     }, [addedLessonTitle, addNotice])
     
     useEffect(() => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         axios.get(`${apiBase}/getbag`,  { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 console.log("BAG DATA:", res.data)
@@ -59,7 +59,7 @@ export default function Bag() {
     }
 
    const handleDeleteBagItem=(id)=>{
-         const token = localStorage.getItem("token")
+         const token = getAccessToken()
          axios.delete(`${apiBase}/deletebagitem/${id}`,{headers:{Authorization:`Bearer ${token}`}})
          .then((res)=>{
             setBag(prev=>prev.filter((item)=>item.lessonId?._id!==res.data.id)  )

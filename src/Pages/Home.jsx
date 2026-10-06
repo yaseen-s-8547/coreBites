@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios, { getAccessToken } from '../api';
 import { useNavigate } from 'react-router-dom';
 import AddToBagButton from "../Components/ui/AddToBagButton"
 
@@ -14,7 +14,7 @@ export default function Home() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
 
         axios.get(`${apiBase}/gethomelessons`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
@@ -24,18 +24,17 @@ export default function Home() {
                 setLessonFetchError(true)
                 setError(err.response?.data?.message || "Unable to fetch lessons")
                 if (err.response?.data?.message === "no token found") {
-                     localStorage.removeItem("token")
                      navigate("/signin")
                 }
 
             })
     }, [navigate])
     const handleAddToBag = (lessonId) => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         return axios.post(`${apiBase}/addtobag/${lessonId}`, {}, { headers: { Authorization: `Bearer ${token}` } })
     }
     const handleSearch=(value)=>{
-        const token= localStorage.getItem("token")
+        const token = getAccessToken()
         axios.get(`${apiBase}/gethomelessons?search=${value}`,{ headers: { Authorization: `Bearer ${token}` } })
         .then((res)=>{
             setLessons(res.data)
@@ -44,14 +43,13 @@ export default function Home() {
                 setLessonFetchError(true)
                 setError(err.response?.data?.message || "Unable to fetch lessons")
                 if (err.response?.data?.message === "no token found") {
-                     localStorage.removeItem("token")
                      navigate("/signin")
                 }
 
             })
     }
     const handleClear=()=>{
-        const token =localStorage.getItem("token")
+        const token = getAccessToken()
            axios.get(`${apiBase}/gethomelessons`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setLessons(res.data)
@@ -60,7 +58,6 @@ export default function Home() {
                 setLessonFetchError(true)
                 setError(err.response?.data?.message || "Unable to fetch lessons")
                 if (err.response?.data?.message === "no token found") {
-                     localStorage.removeItem("token")
                      navigate("/signin")
                 }
 

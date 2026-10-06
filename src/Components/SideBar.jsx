@@ -13,7 +13,8 @@ import {
     faPhone,
     faRupeeSign,
 } from "@fortawesome/free-solid-svg-icons"
-import axios from "axios"
+import axios, { getAccessToken } from "../api"
+import useAuth from "../auth/useAuth"
 import logo from "../assets/coreBitesLogo.png"
 import Button from "./ui/Button"
 import Tooltip from "./ui/Tooltip"
@@ -31,6 +32,7 @@ const navigationItems = [
 
 export default function SideBar({ image, setImage, userName, setUserName, onNavigate }) {
     const navigate = useNavigate()
+    const { signOut } = useAuth()
     const inputId = useId()
     const [isEditName, setIsEditName] = useState(false)
 
@@ -39,7 +41,7 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
             return
         }
 
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         const formData = new FormData()
         formData.append("file", selectedFile)
         axios.post(`${apiBase}/profileImgUpload`, formData, { headers: { Authorization: `Bearer ${token}` } })
@@ -52,7 +54,7 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         axios.get(`${apiBase}/getprofileImage`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setImage(res.data.profilePhoto || "")
@@ -67,7 +69,7 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
     }
 
     const readUserName = () => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         axios.get(`${apiBase}/getUserName`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setUserName(res.data.userName || "User")
@@ -75,7 +77,7 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         axios.get(`${apiBase}/getUserName`, { headers: { Authorization: `Bearer ${token}` } })
             .then((res) => {
                 setUserName(res.data.userName || "User")
@@ -86,7 +88,7 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
     }, [setUserName])
 
     const handleSaveUserName = () => {
-        const token = localStorage.getItem("token")
+        const token = getAccessToken()
         axios.patch(`${apiBase}/saveusername`, { userName }, { headers: { Authorization: `Bearer ${token}` } })
             .then(() => {
                 setIsEditName(false)
@@ -95,8 +97,9 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
     }
 
     const handleLogOut = () => {
-        localStorage.removeItem("token")
-        navigate("/", { replace: true })
+        signOut()
+            .catch((error) => console.error("Sign-out request failed:", error))
+            .finally(() => navigate("/", { replace: true }))
     }
 
     return (

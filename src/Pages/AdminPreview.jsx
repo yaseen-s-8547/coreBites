@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import axios from "axios"
+import axios, { getAccessToken } from "../api"
 import { useParams, useNavigate } from "react-router-dom"
 
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
@@ -14,7 +14,7 @@ export default function AdminPreview() {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken")
+    const token = getAccessToken()
 
     axios
       .get(`${apiBase}/lesson/${id}`, {
@@ -25,7 +25,6 @@ export default function AdminPreview() {
       })
       .catch((err) => {
         if (err.response?.status === 401) {
-          localStorage.removeItem("adminToken")
           navigate("/adminSignin", { replace: true })
         } else {
           setError("Failed to load lesson")
