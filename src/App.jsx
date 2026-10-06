@@ -1,6 +1,7 @@
 
 import './App.css'
-import { Link, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, Navigate, Outlet, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import Landing from './Pages/Landing'
 import Home from './Pages/Home'
 import Signup from './Pages/Signup'
@@ -48,6 +49,25 @@ function NotFound() {
 }
 
 function App() {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const handleLearnerSessionExpired = () => {
+      if (location.pathname !== '/signin') {
+        navigate('/signin', {
+          replace: true,
+          state: { sessionExpired: true },
+        })
+      }
+    }
+
+    window.addEventListener('learner-session-expired', handleLearnerSessionExpired)
+    return () => {
+      window.removeEventListener('learner-session-expired', handleLearnerSessionExpired)
+    }
+  }, [location.pathname, navigate])
+
   return (
     <Routes>
       <Route path="/" element={<Landing />} />

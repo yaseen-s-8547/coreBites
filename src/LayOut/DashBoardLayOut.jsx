@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons"
 import logo from "../assets/coreBitesLogo.png"
 import SideBar from "../Components/SideBar"
+import Tooltip from "../Components/ui/Tooltip"
 
 export default function DashBoardLayOut() {
     const [isOpen, setIsOpen] = useState(false)
@@ -85,17 +86,19 @@ export default function DashBoardLayOut() {
                     <img src={logo} alt="" className="h-9 w-9 object-contain" />
                     <span className="zen-dots-regular text-cb-lg text-white">CoreBites</span>
                 </Link>
-                <button
-                    ref={menuButtonRef}
-                    type="button"
-                    aria-label={isOpen ? "Close learner navigation" : "Open learner navigation"}
-                    aria-expanded={isOpen}
-                    aria-controls="learner-navigation"
-                    onClick={() => setIsOpen(true)}
-                    className="flex size-11 items-center justify-center rounded-cb-sm text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus motion-reduce:transition-none"
-                >
-                    <FontAwesomeIcon icon={faBars} aria-hidden="true" />
-                </button>
+                <Tooltip label="Open learner navigation" position="bottom">
+                    <button
+                        ref={menuButtonRef}
+                        type="button"
+                        aria-label={isOpen ? "Close learner navigation" : "Open learner navigation"}
+                        aria-expanded={isOpen}
+                        aria-controls="learner-navigation"
+                        onClick={() => setIsOpen(true)}
+                        className="flex size-11 items-center justify-center rounded-cb-sm text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus motion-reduce:transition-none"
+                    >
+                        <FontAwesomeIcon icon={faBars} aria-hidden="true" />
+                    </button>
+                </Tooltip>
             </header>
 
             {isMobileDrawerOpen && (
@@ -119,14 +122,20 @@ export default function DashBoardLayOut() {
                     inert={isMobileDrawerClosed || undefined}
                     className={`fixed inset-y-0 left-0 z-50 h-dvh w-72 max-w-[calc(100vw-3rem)] transform border-r border-cb-border bg-cb-surface transition-transform duration-200 motion-reduce:transition-none lg:sticky lg:top-0 lg:h-screen lg:w-64 lg:max-w-none lg:translate-x-0 lg:transform-none lg:transition-none ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
                 >
-                    <button
-                        type="button"
-                        aria-label="Close learner navigation"
-                        onClick={closeMenu}
-                        className="absolute right-3 top-3 z-10 flex size-11 items-center justify-center rounded-cb-sm text-cb-ink transition-colors hover:bg-cb-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus motion-reduce:transition-none lg:hidden"
+                    <Tooltip
+                        label="Close learner navigation"
+                        position="left"
+                        className="absolute right-3 top-3 z-10 lg:hidden"
                     >
-                        <FontAwesomeIcon icon={faXmark} aria-hidden="true" />
-                    </button>
+                        <button
+                            type="button"
+                            aria-label="Close learner navigation"
+                            onClick={closeMenu}
+                            className="flex size-11 items-center justify-center rounded-cb-sm text-cb-ink transition-colors hover:bg-cb-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus motion-reduce:transition-none"
+                        >
+                            <FontAwesomeIcon icon={faXmark} aria-hidden="true" />
+                        </button>
+                    </Tooltip>
                     <SideBar
                         image={image}
                         setImage={setImage}

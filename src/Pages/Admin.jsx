@@ -4,6 +4,7 @@ import AdminNavBar from "../NavBar/AdminNavBar"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons"
+import Tooltip from "../Components/ui/Tooltip"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Admin() {
     const navigate = useNavigate()
@@ -246,8 +247,34 @@ export default function Admin() {
                                                     <span className="text-cb-ink text-sm "> price:{info.isDemo?"Demo":info.isFree?"Free":`₹${info.price}`}</span>
                                                 </div>
                                                 
-                                                <FontAwesomeIcon icon={faTrash} className="absolute top-5 right-5 sm:right-1 text-cb-muted hover:text-cb-ink" onClick={() => handleDeleteModal(info._id)} />
-                                                <FontAwesomeIcon icon={faPenToSquare} className="absolute top-10 right-5 sm:right-1 text-cb-muted hover:text-cb-ink" onClick={() => handleEditModal(info._id)} />
+                                                <Tooltip
+                                                    label="Delete this lesson"
+                                                    position="left"
+                                                    className="absolute top-4 right-4 sm:right-1"
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        aria-label={`Delete ${info.title}`}
+                                                        className="flex size-8 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
+                                                        onClick={() => handleDeleteModal(info._id)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faTrash} aria-hidden="true" />
+                                                    </button>
+                                                </Tooltip>
+                                                <Tooltip
+                                                    label="Edit this lesson"
+                                                    position="left"
+                                                    className="absolute top-12 right-4 sm:right-1"
+                                                >
+                                                    <button
+                                                        type="button"
+                                                        aria-label={`Edit ${info.title}`}
+                                                        className="flex size-8 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
+                                                        onClick={() => handleEditModal(info._id)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faPenToSquare} aria-hidden="true" />
+                                                    </button>
+                                                </Tooltip>
                                                 <p className="line-clamp-3 text-cb-muted mt-3 text-sm font-medium leading-relaxed">
                                                     <span className="font-bold text-cb-ink">Synopsis: </span>
                                                     {info.synopsis?.tagline}

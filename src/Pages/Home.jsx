@@ -1,9 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBriefcase } from '@fortawesome/free-solid-svg-icons';
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AddToBagButton from "../Components/ui/AddToBagButton"
 
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 
@@ -34,13 +32,7 @@ export default function Home() {
     }, [navigate])
     const handleAddToBag = (lessonId) => {
         const token = localStorage.getItem("token")
-        axios.post(`${apiBase}/addtobag/${lessonId}`, {}, { headers: { Authorization: `Bearer ${token}` } })
-            .then((res) => {
-                console.log(res.data.message)
-            })
-            .catch((err) => {
-                console.log(err.response.data.message)
-            })
+        return axios.post(`${apiBase}/addtobag/${lessonId}`, {}, { headers: { Authorization: `Bearer ${token}` } })
     }
     const handleSearch=(value)=>{
         const token= localStorage.getItem("token")
@@ -131,7 +123,18 @@ export default function Home() {
                                     </div>
 
                                     <div className="absolute top-3 right-3 md:right-5 justify-center items-center flex flex-col gap-2">
-                                        <button className="bg-cb-primary text-cb-primary-contrast flex items-center justify-center h-8 w-8 font-bold rounded-cb-sm hover:bg-cb-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus" aria-label={`Add ${lesson.title} to your bag`} onClick={() => handleAddToBag(lesson._id)}><FontAwesomeIcon icon={faBriefcase} className="text-cb-primary-contrast" aria-hidden="true" /></button>
+                                        <AddToBagButton
+                                            itemName={lesson.title}
+                                            onAdd={() => handleAddToBag(lesson._id)}
+                                            onAdded={() => navigate("/app/bag", {
+                                                state: {
+                                                    addNotice: {
+                                                        title: lesson.title,
+                                                        addedAt: Date.now(),
+                                                    },
+                                                },
+                                            })}
+                                        />
                                     </div>
                                 </div>
 

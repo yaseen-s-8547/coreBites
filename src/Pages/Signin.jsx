@@ -13,7 +13,11 @@ export default function Signin() {
     const [password, setPassword] = useState("")
     const [emailErr, setEmailErr] = useState("")
     const [passErr, setPassErr] = useState("")
-    const [signinStatus, setsigninStatus] = useState("")
+    const [signinStatus, setsigninStatus] = useState(
+        location.state?.sessionExpired
+            ? "Your session expired. Please sign in again."
+            : ""
+    )
     const [isSuccess, setIsSuccess] = useState(false)
     const redirectAfterSignin = location.state?.from || "/app/home"
     
@@ -46,12 +50,35 @@ export default function Signin() {
         }
 
     }
-     useEffect(()=>{
-     const token =localStorage.getItem("token")
-     if(token){
-          navigate(redirectAfterSignin, { replace: true })
-     }
-      },[navigate, redirectAfterSignin])
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        if (!token) return
+
+        let ignoreResult = false
+
+        axios.get(`${apiBase}/getUserName`, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+            .then(() => {
+                if (!ignoreResult) {
+                    navigate(redirectAfterSignin, { replace: true })
+                }
+            })
+            .catch((error) => {
+                if (ignoreResult) return
+
+                if (error.response?.status === 401) {
+                    localStorage.removeItem("token")
+                    setsigninStatus("Your session expired. Please sign in again.")
+                } else {
+                    setsigninStatus("Unable to verify your saved session. Please sign in again.")
+                }
+            })
+
+        return () => {
+            ignoreResult = true
+        }
+    }, [navigate, redirectAfterSignin])
 
 
     return (

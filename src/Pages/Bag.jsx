@@ -2,8 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBriefcase, faTrash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from "../Components/ui/Button"
+import Toast from "../Components/ui/Toast"
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 export default function Bag() {
 
@@ -11,6 +12,28 @@ export default function Bag() {
     const [bagErr, setBagErr] = useState("")
     const [isBag, setIsBag] = useState(true)
     const [isModalId ,setIsModalId]=useState(null)
+    const location = useLocation()
+    const navigate = useNavigate()
+    const addNotice = location.state?.addNotice
+    const [addedLessonTitle, setAddedLessonTitle] = useState(() =>
+        addNotice && Date.now() - addNotice.addedAt < 1800
+            ? addNotice.title
+            : ""
+    )
+
+    useEffect(() => {
+        if (!addedLessonTitle) return
+
+        const remainingDuration = Math.max(
+            0,
+            1800 - (Date.now() - addNotice.addedAt)
+        )
+        const timeoutId = window.setTimeout(
+            () => setAddedLessonTitle(""),
+            remainingDuration
+        )
+        return () => window.clearTimeout(timeoutId)
+    }, [addedLessonTitle, addNotice])
     
     useEffect(() => {
         const token = localStorage.getItem("token")
@@ -47,7 +70,6 @@ export default function Bag() {
          })
          
    }
-   const navigate = useNavigate()
    const handlePurchase=(id)=>{
        navigate(`/paywall/${id}`)
         
@@ -59,6 +81,9 @@ export default function Bag() {
 
     return (
         <>
+            {addedLessonTitle && (
+                <Toast message={`${addedLessonTitle} added to Your Bag`} />
+            )}
 
             <div className="grid grid-cols-12  ms-10 h-25 mt-2 ">
                 <div className="lg:col-span-2 md:col-span-1"></div>

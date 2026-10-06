@@ -16,6 +16,7 @@ import {
 import axios from "axios"
 import logo from "../assets/coreBitesLogo.png"
 import Button from "./ui/Button"
+import Tooltip from "./ui/Tooltip"
 
 const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"
 
@@ -155,23 +156,27 @@ export default function SideBar({ image, setImage, userName, setUserName, onNavi
                 </div>
 
                 {isEditName ? (
-                    <button
-                        type="button"
-                        aria-label="Save profile name"
-                        onClick={handleSaveUserName}
-                        className="flex size-11 shrink-0 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
-                    >
-                        <FontAwesomeIcon icon={faFloppyDisk} aria-hidden="true" />
-                    </button>
+                    <Tooltip label="Save the updated profile name" position="bottom">
+                        <button
+                            type="button"
+                            aria-label="Save profile name"
+                            onClick={handleSaveUserName}
+                            className="flex size-11 shrink-0 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
+                        >
+                            <FontAwesomeIcon icon={faFloppyDisk} aria-hidden="true" />
+                        </button>
+                    </Tooltip>
                 ) : (
-                    <button
-                        type="button"
-                        aria-label="Edit profile name"
-                        onClick={handleEditName}
-                        className="flex size-11 shrink-0 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
-                    >
-                        <FontAwesomeIcon icon={faPen} aria-hidden="true" />
-                    </button>
+                    <Tooltip label="Change your profile name" position="bottom">
+                        <button
+                            type="button"
+                            aria-label="Edit profile name"
+                            onClick={handleEditName}
+                            className="flex size-11 shrink-0 items-center justify-center rounded-cb-sm text-cb-muted hover:bg-cb-surface-muted hover:text-cb-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cb-focus"
+                        >
+                            <FontAwesomeIcon icon={faPen} aria-hidden="true" />
+                        </button>
+                    </Tooltip>
                 )}
             </section>
 
